@@ -8,7 +8,7 @@ import TransactionTable from '@/components/TransactionTable';
 const Main = () => {
   return (
     <Container maxWidth='md'>
-      <Stack spacing={4}>
+      <Stack spacing={4} marginTop={4}>
         <TitleWithSearch />
         <FilterBox />
         <TransactionTable />
