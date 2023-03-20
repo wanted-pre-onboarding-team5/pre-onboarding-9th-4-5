@@ -12,6 +12,7 @@ import { AscOrDesc } from '@/utils';
 
 import { OrderTableBody } from './OrderTableBody';
 import { OrderTableHead } from './OrderTableHead';
+import { OrderTableToolbar } from './OrderTableToolbar';
 
 import { OrderData, OrderDataKey } from '@/types/OrderDataType';
 
@@ -53,6 +54,7 @@ export const OrderTable = ({ rows }: OrderTableProps) => {
   return (
     <Box>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <OrderTableToolbar />
         <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader aria-label='sticky table' size={dense ? 'small' : 'medium'}>
             <OrderTableHead
