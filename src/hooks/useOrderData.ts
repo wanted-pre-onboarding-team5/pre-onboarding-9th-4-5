@@ -17,9 +17,13 @@ export const useOrderData = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const params = queryString.parse(searchParams.toString());
 
-  const orderData = data.filter((order: OrderData) =>
-    order.transaction_time.includes('2023-03-08'),
-  );
+  let orderData = data.filter((order: OrderData) => order.transaction_time.includes('2023-03-08'));
+
+  if (params.status) {
+    orderData = orderData.filter((order: OrderData) =>
+      params.status === 'all' ? true : params.status === 'true' ? order.status : !order.status,
+    );
+  }
 
   const handlePagenation = (model: GridPaginationModel) => {
     const newParams = { ...params, page: model.page + 1 };
