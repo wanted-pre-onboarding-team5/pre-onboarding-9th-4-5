@@ -1,6 +1,6 @@
-export type responseData = responseObject[];
+export type ResponseData = ResponseObject[];
 
-export type responseObject = {
+export type ResponseObject = {
   id: number;
   transaction_time: string;
   status: boolean;
