@@ -7,7 +7,7 @@ export const useForm = () => {
   const params = queryString.parse(searchParams.toString());
 
   const handleChange = (e: SelectChangeEvent) => {
-    const newParams = { ...params, status: e.target.value };
+    const newParams = { ...params, status: e.target.value, page: 1 };
     setSearchParams(queryString.stringify(newParams));
   };
 
