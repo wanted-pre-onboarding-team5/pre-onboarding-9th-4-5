@@ -6,3 +6,5 @@ export interface OrderData {
   customer_name: string;
   currency: string;
 }
+
+export type OrderDataKey = keyof OrderData;

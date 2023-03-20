@@ -4,19 +4,29 @@ export const TRANSACTION_TIME_DISPLAY = {
   date: 8,
 } as const;
 
-// table
 export const DEFAULT_DATA_ROW_COUNT = 50;
 
-interface Column {
+interface OrderTableColumn {
   id: 'id' | 'transaction_time' | 'status' | 'customer_id' | 'customer_name' | 'currency';
   label: string;
   minWidth?: number;
   align?: 'right';
+  hasSortLabel?: boolean;
 }
 
-export const ORDER_TABLE_COLUMNS: readonly Column[] = [
-  { id: 'id', label: '주문 번호', minWidth: 50 },
-  { id: 'transaction_time', label: '거래 날짜 및 시간', minWidth: 100 },
+export const ORDER_TABLE_COLUMNS: readonly OrderTableColumn[] = [
+  {
+    id: 'id',
+    label: '주문 번호',
+    minWidth: 50,
+    hasSortLabel: true,
+  },
+  {
+    id: 'transaction_time',
+    label: '거래 날짜 및 시간',
+    minWidth: 100,
+    hasSortLabel: true,
+  },
   {
     id: 'status',
     label: '주문 처리 상태',
