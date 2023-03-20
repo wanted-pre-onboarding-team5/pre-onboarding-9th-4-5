@@ -33,7 +33,7 @@ export const OrderTableBody = ({
                 const value = row[column.id];
                 return (
                   <TableCell key={column.id} align={column.align}>
-                    {typeof value === 'boolean' ? (value ? 'true' : 'false') : value}
+                    {column.id === 'status' ? (value ? '✅' : '❌') : value}
                   </TableCell>
                 );
               })}
