@@ -4,18 +4,21 @@ import {
   TableHead,
   TableBody,
   TableRow,
+  TableSortLabel,
   TableCell,
   tableCellClasses,
   TablePagination,
   styled,
   Typography,
 } from '@mui/material';
-import React from 'react';
-import { useLoaderData } from 'react-router-dom';
+import * as React from 'react';
+import { useLoaderData, useSearchParams } from 'react-router-dom';
 
 import type { ResponseData } from '@/types/responseData';
 
 import { TABLE_HEAD_CONTEXT, ROWS_PER_PAGE } from '@/constants/table';
+import { processData } from '@/helpers/processData';
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter';
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -33,7 +36,13 @@ const TransactionTable = () => {
   const [page, setPage] = React.useState(0);
   const pageTopRef = React.useRef<HTMLDivElement>(null);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sort = searchParams.get('sort') as 'id' | 'datetime';
+  const status = searchParams.get('status');
+  const datetime = searchParams.get('datetime');
+
   const loaderData = useLoaderData() as ResponseData;
+  const processedDataArray = processData(loaderData, { sort, datetime, status });
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -47,27 +56,49 @@ const TransactionTable = () => {
       <Table aria-label='transaction-table'>
         <TableHead>
           <TableRow>
-            {TABLE_HEAD_CONTEXT.map((item) => (
-              <StyledTableCell key={item.field} size='small'>
-                {item.label}
-              </StyledTableCell>
-            ))}
+            {TABLE_HEAD_CONTEXT.map((item) =>
+              item.isSortPosssible ? (
+                <StyledTableCell size='small' sortDirection='desc' key={item.field}>
+                  <TableSortLabel
+                    direction='desc'
+                    active={sort === item.field}
+                    onClick={() => {
+                      if (searchParams.has('sort')) {
+                        searchParams.delete('sort');
+                      }
+
+                      searchParams.append('sort', item.field);
+                      setSearchParams(searchParams);
+                    }}
+                  >
+                    {item.label}
+                  </TableSortLabel>
+                </StyledTableCell>
+              ) : (
+                <StyledTableCell key={item.field} size='small'>
+                  {item.label}
+                </StyledTableCell>
+              ),
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
-          {loaderData
+          {processedDataArray
             .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
             .map((item) => (
               <TableRow key={item.id}>
                 <StyledTableCell>{item.id}</StyledTableCell>
                 <StyledTableCell>
-                  {item.customer_name} (ID: {item.customer_id})
+                  {item.customer.name} (ID: {item.customer.id})
                 </StyledTableCell>
                 <StyledTableCell>{item.currency}</StyledTableCell>
-                <StyledTableCell>{item.transaction_time}</StyledTableCell>
+                <StyledTableCell>{item.datetime}</StyledTableCell>
                 <StyledTableCell>
-                  <Typography variant='body2' color={item.status ? 'darkgreen' : 'red'}>
-                    {item.status ? 'approved' : 'rejected'}
+                  <Typography
+                    variant='body2'
+                    color={item.status === 'approved' ? 'darkgreen' : 'red'}
+                  >
+                    {capitalizeFirstLetter(item.status)}
                   </Typography>
                 </StyledTableCell>
               </TableRow>
@@ -76,7 +107,7 @@ const TransactionTable = () => {
       </Table>
       <TablePagination
         component='div'
-        count={loaderData.length}
+        count={processedDataArray.length}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={ROWS_PER_PAGE}
