@@ -42,14 +42,15 @@ export const processData = (
 
   return transformedData
     .filter((data) => {
-      let flag = true;
+      let flag1 = true;
+      let flag2 = true;
       if (status) {
-        flag = statusFilterFn(data, status);
+        flag1 = statusFilterFn(data, status);
       }
       if (datetime) {
-        flag = dateFilterFn(data, datetime);
+        flag2 = dateFilterFn(data, datetime);
       }
-      return flag;
+      return flag1 && flag2;
     })
     .sort((a, b) => descendingComparator(a, b, sort));
 };
