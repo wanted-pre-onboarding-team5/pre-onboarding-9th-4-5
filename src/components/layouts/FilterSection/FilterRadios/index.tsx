@@ -38,7 +38,7 @@ const FilterRadios = () => {
         row
         defaultValue='all'
         name='radio-buttons-group'
-        value={filters[FILTER_STATUS.name]}
+        value={filters[FILTER_STATUS.name] || 'all'}
         onChange={handleRadio}
       >
         {FILTER_STATUS.options.map((radio) => (
