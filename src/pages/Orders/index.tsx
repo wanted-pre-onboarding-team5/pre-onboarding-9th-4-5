@@ -51,7 +51,7 @@ export const Orders = () => {
   }: {
     data: [] | undefined;
     isLoading: boolean;
-  } = useFetchOrder(filters);
+  } = useFetchOrder(filters, { refetchInterval: 5000 });
 
   useEffect(() => {
     setSearchParams({
