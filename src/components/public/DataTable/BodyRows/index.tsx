@@ -1,5 +1,7 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
 
+import { TableOption } from '../index';
+
 import { Order } from '@/types/table';
 
 interface BodyRowsProps {
@@ -8,6 +10,7 @@ interface BodyRowsProps {
   page: number;
   rowsPerPage: number;
   tableDataList: [];
+  tableOption: TableOption;
 }
 
 export const BodyRows = (props: BodyRowsProps) => {
@@ -57,7 +60,7 @@ export const BodyRows = (props: BodyRowsProps) => {
                     key={index}
                     align={cell.align}
                     padding={cell.disablePadding ? 'none' : 'normal'}
-                    sx={{ ...cell.style, border: '1px solid #eee' }}
+                    sx={{ ...cell.style, border: '1px solid #eee', borderBottomColor: '#bbb' }}
                   >
                     {String(row[cell.id])}
                   </TableCell>
