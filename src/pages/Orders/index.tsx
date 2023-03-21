@@ -1,13 +1,15 @@
 import { Box } from '@mui/material';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-import { TABLE_OPTIONS, FILTER_STATUS } from '@/constants';
+import { TABLE_OPTIONS } from '@/constants';
 
+import FilterSection from '@/components/layouts/FilterSection';
 import DataTable from '@/components/public/DataTable';
-import FilterRadios from '@/components/public/FilterRadios';
 import Spinner from '@/components/public/Spinner';
 import { useFetchOrder } from '@/hooks/useFetchOrder';
 import { getToday } from '@/utils/getToday';
+import { querySplit } from '@/utils/querySplit';
 
 interface SwitchOneApi {
   id?: number;
@@ -20,11 +22,16 @@ interface SwitchOneApi {
 
 export const Orders = () => {
   const todayDate = getToday();
-  const [filters, setFilters] = useState({ transaction_time: todayDate, status: 'all' });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filters = querySplit(searchParams.toString());
 
-  const handleStatus = (event: React.MouseEvent<HTMLElement>, status: string) => {
-    setFilters({ ...filters, status });
-  };
+  useEffect(() => {
+    setSearchParams({
+      page: 1,
+      status: 'all',
+      transaction_time: todayDate,
+    });
+  }, []);
 
   const {
     data,
@@ -37,7 +44,7 @@ export const Orders = () => {
 
   return (
     <Box sx={{ height: 800 }}>
-      <FilterRadios radios={FILTER_STATUS} filters={filters} handleStatus={handleStatus} />
+      <FilterSection />
       {isLoading ? <Spinner /> : <DataTable tableDataList={data} tableOption={TABLE_OPTIONS} />}
     </Box>
   );
