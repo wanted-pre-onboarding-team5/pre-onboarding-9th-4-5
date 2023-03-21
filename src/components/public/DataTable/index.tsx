@@ -11,6 +11,7 @@ export interface TableOption {
   defaultOrderBy: string;
   defaultDataRowCount: number;
   headerCells: HeaderCell[];
+  style: React.CSSProperties;
 }
 
 export interface HeaderCell {
