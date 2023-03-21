@@ -1,14 +1,16 @@
 import { Button, ButtonGroup, Container } from '@mui/material';
+import { useSearchParams } from 'react-router-dom';
 
 import { QueryData } from '@/types/queryData';
 
 interface PaginationProps {
   getDatas: QueryData[];
-  currPage: React.Dispatch<React.SetStateAction<number>>;
+  currPage: number;
   setCurrPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const Pagination = ({ getDatas, currPage, setCurrPage }: PaginationProps) => {
+  const [, setParams] = useSearchParams();
   let totalPage;
   let totalPageArray;
   const listPerPage = 50;
@@ -20,25 +22,40 @@ export const Pagination = ({ getDatas, currPage, setCurrPage }: PaginationProps)
       .map((_, i) => i);
   }
 
+  const prevPageClick = () => {
+    setCurrPage(currPage - 1);
+    setParams({ page: currPage - 1 });
+  };
+
+  const nextPageClick = () => {
+    setCurrPage(currPage + 1);
+    setParams({ page: currPage + 1 });
+  };
+
+  const currentPageClick = (page) => {
+    setCurrPage(page);
+    setParams({ page: page });
+  };
+
   return (
     <Container
       style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 20 }}
     >
       <ButtonGroup size='large' color='inherit' style={{ backgroundColor: 'orange' }}>
-        <Button
-          onClick={() => setCurrPage(currPage - 1)}
-          disabled={currPage === 1}
-          style={{ color: 'white' }}
-        >
+        <Button onClick={prevPageClick} disabled={currPage === 1} style={{ color: 'white' }}>
           &lt;
         </Button>
-        {totalPageArray?.map((page) => (
-          <Button key={page} onClick={() => setCurrPage(page + 1)} style={{ color: 'white' }}>
-            {page + 1}
+        {totalPageArray?.map((currentPage) => (
+          <Button
+            key={currentPage}
+            onClick={() => currentPageClick(currentPage + 1)}
+            style={{ color: 'white' }}
+          >
+            {currentPage + 1}
           </Button>
         ))}
         <Button
-          onClick={() => setCurrPage(currPage + 1)}
+          onClick={nextPageClick}
           disabled={currPage === totalPage}
           style={{ color: 'white' }}
         >
