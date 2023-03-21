@@ -4,7 +4,6 @@ const FilterRadios = ({ radios, filters, handleStatus }) => {
   return (
     <FormControl
       sx={{
-        width: '100%',
         margin: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end',
