@@ -8,16 +8,17 @@ import {
   Paper,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useLoaderData } from 'react-router-dom';
 
 import { MAX_SIZE } from '@/constants';
 
+// import { Pagination, SearchInput } from '@/components';
 import { Pagination } from '@/components/Pagination';
+import { SearchInput } from '@/components/SearchInput';
 import { OrderData } from '@/types/order';
-import { getOrderData } from '@/utils/getOrderData';
-
 
 export const Main = () => {
-  const orderData = getOrderData();
+  const orderData = useLoaderData() as OrderData[];
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const startPage = MAX_SIZE * currentPage - MAX_SIZE;
@@ -26,6 +27,8 @@ export const Main = () => {
   const [test, setTest] = useState<OrderData[]>(orderData.slice(startPage, finishPage));
   const [isAscending, setIsAscending] = useState<boolean>(true);
   const [isDateAscending, setIsDateAscending] = useState<boolean | null>(null);
+
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => setTest(orderData.slice(startPage, finishPage)), [startPage, finishPage]);
 
@@ -51,8 +54,22 @@ export const Main = () => {
     }
   }, [isDateAscending]);
 
+  useEffect(() => {
+    if (searchTerm === '') {
+      setCurrentPage(1);
+      setTest(orderData);
+      return;
+    }
+
+    const filteredData = orderData.filter((order) =>
+      order.customer_name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    setTest(filteredData);
+  }, [searchTerm]);
+
   return (
     <>
+      <SearchInput onSearchChange={setSearchTerm} />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>
           <TableHead>
@@ -70,7 +87,8 @@ export const Main = () => {
               <TableCell>가격</TableCell>
             </TableRow>
           </TableHead>
-          {orderData.map((el) => (
+          {/* {test.map((el) => ( */}
+          {test.slice(startPage, finishPage).map((el) => (
             <TableBody key={el.id}>
               <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell>{el.id}</TableCell>
@@ -86,7 +104,9 @@ export const Main = () => {
       </TableContainer>
       <Pagination
         currentPage={currentPage}
-        totalPages={orderData.length / MAX_SIZE}
+        totalPages={
+          searchTerm ? parseInt((test.length / MAX_SIZE).toString()) : orderData.length / MAX_SIZE
+        }
         onPageChange={setCurrentPage}
       />
     </>
