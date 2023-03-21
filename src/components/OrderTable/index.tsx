@@ -6,6 +6,7 @@ import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import * as React from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { DEFAULT_DATA_ROW_COUNT } from '@/constants';
 import { AscOrDesc } from '@/utils';
@@ -25,12 +26,31 @@ export interface TableSortProps {
   orderBy: OrderDataKey;
 }
 
+const filterOrderDataByStatus = (originOrderData: OrderData[], status: string | null) => {
+  if (status === 'all' || status === null) {
+    return originOrderData;
+  }
+
+  return originOrderData.filter((order) => {
+    return order.status === (status === 'true' ? true : false);
+  });
+};
+
 export const OrderTable = ({ rows }: OrderTableProps) => {
+  const originOrderData = rows;
+  const [searchParams, setSearchParams] = useSearchParams();
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_DATA_ROW_COUNT);
   const [ascOrDesc, setAscOrDesc] = React.useState<AscOrDesc>('asc');
   const [orderBy, setOrderBy] = React.useState<OrderDataKey>('id');
+  const [orderData, setOrderData] = React.useState(rows);
+
+  React.useEffect(() => {
+    const orderStatus = searchParams.get('status');
+    const filteredOrderData = filterOrderDataByStatus(originOrderData, orderStatus);
+    setOrderData(filteredOrderData);
+  }, [setSearchParams, searchParams]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -54,7 +74,7 @@ export const OrderTable = ({ rows }: OrderTableProps) => {
   return (
     <Box>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <OrderTableToolbar />
+        <OrderTableToolbar setSearchParams={setSearchParams} />
         <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader aria-label='sticky table' size={dense ? 'small' : 'medium'}>
             <OrderTableHead
@@ -63,7 +83,7 @@ export const OrderTable = ({ rows }: OrderTableProps) => {
               onRequestSort={handleRequestSort}
             />
             <OrderTableBody
-              rows={rows}
+              rows={orderData}
               ascOrDesc={ascOrDesc}
               orderBy={orderBy}
               page={page}

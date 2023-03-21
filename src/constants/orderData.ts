@@ -27,12 +27,7 @@ export const ORDER_TABLE_COLUMNS: readonly OrderTableColumn[] = [
     minWidth: 100,
     hasSortLabel: true,
   },
-  {
-    id: 'status',
-    label: '주문 처리 상태',
-    minWidth: 100,
-    align: 'right',
-  },
+
   {
     id: 'customer_id',
     label: '고객 번호',
@@ -51,4 +46,16 @@ export const ORDER_TABLE_COLUMNS: readonly OrderTableColumn[] = [
     minWidth: 170,
     align: 'right',
   },
+  {
+    id: 'status',
+    label: '주문 처리 상태',
+    minWidth: 100,
+    align: 'right',
+  },
 ];
+
+export const ORDER_TABLE_FILTER_OPTIONS = [
+  { value: 'all', label: 'ALL', color: '#90939981' },
+  { value: 'true', label: '✅', color: '#67c23a96' },
+  { value: 'false', label: '❌', color: '#f56c6c97' },
+] as const;
