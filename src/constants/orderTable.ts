@@ -54,10 +54,10 @@ export const FILTER_STATUS = {
 } as const;
 
 export const TABLE_OPTIONS = {
+  headerCells: HEAD_CELLS,
   defaultOrder: 'asc',
   defaultOrderBy: 'id',
   defaultPage: '0',
   defaultStatus: 'all',
   defaultRowPerPage: '50',
-  headerCells: HEAD_CELLS,
-};
+} as const;
