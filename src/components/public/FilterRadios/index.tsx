@@ -11,7 +11,18 @@ const FilterRadios = ({ radios, filters, handleStatus }) => {
         alignItems: 'center',
       }}
     >
-      <FormLabel sx={{ pr: 2, fontWeight: 'bold' }}>{radios.label}</FormLabel>
+      <FormLabel
+        sx={{
+          pr: 2,
+          color: '#0f0f0f',
+          fontWeight: 'bold',
+          '&.Mui-focused': {
+            color: '#0f0f0f',
+          },
+        }}
+      >
+        {radios.label}
+      </FormLabel>
       <RadioGroup
         row
         defaultValue='all'
@@ -23,8 +34,22 @@ const FilterRadios = ({ radios, filters, handleStatus }) => {
           <FormControlLabel
             key={radio.value}
             value={radio.value}
-            control={<Radio />}
+            control={
+              <Radio
+                sx={{
+                  color: '#F7941C',
+                  '&.Mui-checked': {
+                    color: '#F7941C',
+                  },
+                }}
+              />
+            }
             label={radio.label}
+            sx={{
+              '&.Mui-focused': {
+                color: '#F7941C',
+              },
+            }}
           />
         ))}
       </RadioGroup>
