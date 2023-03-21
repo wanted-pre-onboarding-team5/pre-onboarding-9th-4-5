@@ -5,6 +5,11 @@ import { httpClient } from '@/utils/httpClient';
 
 export const fetchOrder = async (filters: SwitchOneApi) => {
   const orderList: SwitchOneApi[] = await httpClient(API_PATH.data);
+  const filteredOrderList = filterOrderList(orderList, filters);
+  return filteredOrderList;
+};
+
+const filterOrderList = (orderList: SwitchOneApi[], filters: SwitchOneApi) => {
   return orderList.reduce((acc, order) => {
     const idCondition = filters.id ? order.id === filters.id : true;
     const timeCondition = filters.transaction_time
