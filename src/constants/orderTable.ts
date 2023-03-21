@@ -22,10 +22,10 @@ const HEAD_CELLS = [
   },
   {
     id: 'customer_name',
-    align: 'left',
+    align: 'center',
     disablePadding: false,
     label: '고객이름',
-    style: { fontWeight: 700 },
+    style: { fontWeight: 700, textAlign: 'left' },
   },
   {
     id: 'currency',
