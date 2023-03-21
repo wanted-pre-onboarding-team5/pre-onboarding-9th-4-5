@@ -8,6 +8,7 @@ export const useTableFilter = (tableData: OrderData[]) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentFilter, setCurrentFilter] = useState(searchParams.get('status') || 'all');
   const [filteredData, setFilteredData] = useState(tableData);
+  const [searchInputValue, setSearchInputValue] = useState('');
 
   const filterDataByStatus = (status: string | null) => {
     if (status === 'all' || status === null) {
@@ -19,10 +20,27 @@ export const useTableFilter = (tableData: OrderData[]) => {
     });
   };
 
+  const filterDataByCustomerName = (customerName: string | null) => {
+    if (!customerName) {
+      return originalData;
+    }
+    return originalData.filter((order) => {
+      return order.customer_name.includes(customerName);
+    });
+  };
+
   useEffect(() => {
     const orderStatus = searchParams.get('status');
-    const filteredOrderData = filterDataByStatus(orderStatus);
-    setFilteredData(filteredOrderData);
+    if (orderStatus) {
+      const filteredOrderData = filterDataByStatus(orderStatus);
+      setFilteredData(filteredOrderData);
+      return;
+    }
+
+    const customerName = searchParams.get('customer_name') || '';
+    const searchResult = filterDataByCustomerName(customerName);
+    setFilteredData(searchResult);
+    setCurrentFilter('all');
   }, [setSearchParams, searchParams]);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,9 +49,17 @@ export const useTableFilter = (tableData: OrderData[]) => {
     setSearchParams({ status: selectedFilter });
   };
 
+  const handleSearchBarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const customerName = e.target.value;
+    setSearchInputValue(customerName);
+    setSearchParams({ customer_name: customerName });
+  };
+
   return {
     currentFilter,
     handleFilterChange,
     filteredData,
+    handleSearchBarChange,
+    searchInputValue,
   };
 };

@@ -19,7 +19,14 @@ interface OrderTableProps {
 }
 
 export const OrderTable = ({ rows }: OrderTableProps) => {
-  const { currentFilter, handleFilterChange, filteredData } = useTableFilter(rows);
+  const {
+    currentFilter,
+    handleFilterChange,
+    filteredData,
+    searchInputValue,
+    handleSearchBarChange,
+  } = useTableFilter(rows);
+
   const {
     page,
     dense,
@@ -35,7 +42,12 @@ export const OrderTable = ({ rows }: OrderTableProps) => {
   return (
     <Box>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <OrderTableToolbar onChange={handleFilterChange} currentFilter={currentFilter} />
+        <OrderTableToolbar
+          onChange={handleFilterChange}
+          currentFilter={currentFilter}
+          searchInputValue={searchInputValue}
+          onSearchBarChange={handleSearchBarChange}
+        />
         <TableContainer sx={{ maxHeight: 500 }}>
           <Table stickyHeader aria-label='sticky table' size={dense ? 'small' : 'medium'}>
             <OrderTableHead

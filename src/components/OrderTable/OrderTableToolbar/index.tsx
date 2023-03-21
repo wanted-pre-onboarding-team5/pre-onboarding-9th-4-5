@@ -2,13 +2,21 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 import { OrderTableFilter } from './OrderTableFilter';
+import { SearchBar } from './SearchBar';
 
 interface OrderTableToolbarProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSearchBarChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   currentFilter: string;
+  searchInputValue: string;
 }
 
-export const OrderTableToolbar = ({ onChange, currentFilter }: OrderTableToolbarProps) => {
+export const OrderTableToolbar = ({
+  onChange,
+  currentFilter,
+  onSearchBarChange,
+  searchInputValue,
+}: OrderTableToolbarProps) => {
   return (
     <Toolbar
       sx={{
@@ -27,6 +35,7 @@ export const OrderTableToolbar = ({ onChange, currentFilter }: OrderTableToolbar
       >
         Order Table
       </Typography>
+      <SearchBar searchInputValue={searchInputValue} onChange={onSearchBarChange} />
       <OrderTableFilter onChange={onChange} currentFilter={currentFilter} />
     </Toolbar>
   );
