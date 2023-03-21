@@ -6,8 +6,8 @@ const Header = () => {
     <Container>
       <h1>
         <a href='/'>
-          <img style={{ width: '200px' }} src='/logo.png' alt='logo' />
-          <span style={{ display: 'none' }}>SWITCH ONE</span>
+          <img style={{ width: '200px' }} src='/assets/logo.png' alt='SWITCH WON' />
+          <span style={{ display: 'none' }}>SWITCH WON</span>
         </a>
       </h1>
     </Container>
