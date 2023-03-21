@@ -14,6 +14,8 @@ import {
 import * as React from 'react';
 import { useLoaderData, useSearchParams } from 'react-router-dom';
 
+import HightLight from './HightLight';
+
 import type { ResponseData } from '@/types/responseData';
 
 import { TABLE_HEAD_CONTEXT, ROWS_PER_PAGE } from '@/constants/table';
@@ -40,9 +42,10 @@ const TransactionTable = () => {
   const sort = searchParams.get('sort') as 'id' | 'datetime';
   const status = searchParams.get('status');
   const datetime = searchParams.get('datetime');
+  const search = searchParams.get('search');
 
   const loaderData = useLoaderData() as ResponseData;
-  const processedDataArray = processData(loaderData, { sort, datetime, status });
+  const processedDataArray = processData(loaderData, { sort, datetime, status, search });
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -89,7 +92,16 @@ const TransactionTable = () => {
               <TableRow key={item.id}>
                 <StyledTableCell>{item.id}</StyledTableCell>
                 <StyledTableCell>
-                  {item.customer.name} (ID: {item.customer.id})
+                  {search ? (
+                    <>
+                      <HightLight query={search}>{item.customer.name}</HightLight> (ID:
+                      {item.customer.id})
+                    </>
+                  ) : (
+                    <>
+                      {item.customer.name} (ID: {item.customer.id})
+                    </>
+                  )}
                 </StyledTableCell>
                 <StyledTableCell>{item.currency}</StyledTableCell>
                 <StyledTableCell>{item.datetime}</StyledTableCell>
