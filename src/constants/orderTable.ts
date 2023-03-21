@@ -53,11 +53,11 @@ export const FILTER_STATUS = {
   ],
 } as const;
 
-export const DEFAULT_DATA_ROW_COUNT = 50;
-
 export const TABLE_OPTIONS = {
   defaultOrder: 'asc',
   defaultOrderBy: 'id',
-  defaultDataRowCount: 50,
+  defaultPage: '0',
+  defaultStatus: 'all',
+  defaultRowPerPage: '50',
   headerCells: HEAD_CELLS,
 };
