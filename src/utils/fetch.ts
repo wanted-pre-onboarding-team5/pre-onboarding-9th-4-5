@@ -8,7 +8,7 @@ export const fetchMockAPI = async (url: string, options = {}) => {
 };
 
 export const SwitchOneMockAPI = async () => {
-  const response = await fetchMockAPI('http://127.0.0.1:5173/data/mock_data.json', {
+  const response = await fetchMockAPI('./data/mock_data.json', {
     method: 'GET',
   });
   return response;
