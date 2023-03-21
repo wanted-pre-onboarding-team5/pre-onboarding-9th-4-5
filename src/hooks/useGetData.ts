@@ -12,9 +12,9 @@ export const useGetData = () => {
   return useQuery({
     queryKey: ['SwitchOneMockData'],
     queryFn: () => SwitchOneMockAPI(),
-    staleTime: 5000,
-    // refetchInterval: 5000,
-    // refetchIntervalInBackground: true,
+    // staleTime: 5000,
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
     select: (mockDatas) => {
       const data = mockDatas.filter((mockData: mockDataProps) =>
         mockData.transaction_time.includes('2023-03-08'),
