@@ -5,9 +5,7 @@ import TableRow from '@mui/material/TableRow';
 import { ORDER_TABLE_COLUMNS } from '@/constants';
 import { getComparator, stableSort } from '@/utils';
 
-import { TableSortProps } from './index';
-
-import { OrderData } from '@/types/OrderDataType';
+import { OrderData, TableSortProps } from '@/types/OrderDataType';
 
 interface OrderTableBodyProps extends TableSortProps {
   rows: OrderData[];

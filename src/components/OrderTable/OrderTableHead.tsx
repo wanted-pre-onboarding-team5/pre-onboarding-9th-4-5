@@ -7,9 +7,7 @@ import { visuallyHidden } from '@mui/utils';
 
 import { ORDER_TABLE_COLUMNS } from '@/constants';
 
-import { TableSortProps } from './index';
-
-import { OrderDataKey } from '@/types/OrderDataType';
+import { OrderDataKey, TableSortProps } from '@/types/OrderDataType';
 
 interface CellWithSortLabelProps extends TableSortProps {
   id: OrderDataKey;

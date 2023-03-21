@@ -8,3 +8,10 @@ export interface OrderData {
 }
 
 export type OrderDataKey = keyof OrderData;
+
+export type AscOrDesc = 'asc' | 'desc';
+
+export interface TableSortProps {
+  ascOrDesc: AscOrDesc;
+  orderBy: OrderDataKey;
+}

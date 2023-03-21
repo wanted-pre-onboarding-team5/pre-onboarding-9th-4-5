@@ -1,31 +1,33 @@
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 import { OrderTableFilter } from './OrderTableFilter';
 
-export const OrderTableToolbar = ({ setSearchParams }) => {
-  const [searchParams] = useSearchParams();
-  const [currentFilter, setCurrentFilter] = useState<string>(searchParams.get('status') || 'all');
+interface OrderTableToolbarProps {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  currentFilter: string;
+}
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFilter = e.target.value;
-    setCurrentFilter(selectedFilter);
-    setSearchParams({ status: selectedFilter });
-  };
-
+export const OrderTableToolbar = ({ onChange, currentFilter }: OrderTableToolbarProps) => {
   return (
     <Toolbar
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
+        display: 'flex',
+        justifyContent: 'space-between',
       }}
     >
-      <Typography sx={{ flex: '1 1 100%' }} variant='h5' id='tableTitle' component='div'>
+      <Typography
+        variant='h5'
+        id='tableTitle'
+        component='div'
+        letterSpacing='2px'
+        fontWeight='bold'
+      >
         Order Table
       </Typography>
-      <OrderTableFilter onChange={handleFilterChange} currentFilter={currentFilter} />
+      <OrderTableFilter onChange={onChange} currentFilter={currentFilter} />
     </Toolbar>
   );
 };
