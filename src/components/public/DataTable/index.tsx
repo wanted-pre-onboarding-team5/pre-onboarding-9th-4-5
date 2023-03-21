@@ -5,10 +5,8 @@ import { Filters } from '@/pages';
 import { BodyRows } from './BodyRows';
 import { HeaderRow } from './HeaderRow';
 
-import { Order } from '@/types/table';
-
 export interface TableOption {
-  defaultOrder: Order;
+  defaultOrder: string;
   defaultOrderBy: string;
   defaultRowPerPage: number;
   headerCells: HeaderCell[];
