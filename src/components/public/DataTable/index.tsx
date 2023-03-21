@@ -1,5 +1,6 @@
 import { Box, Table, TableContainer, TablePagination, Paper } from '@mui/material';
-import { useState } from 'react';
+
+import { Filters } from '@/pages';
 
 import { BodyRows } from './BodyRows';
 import { HeaderRow } from './HeaderRow';
@@ -9,9 +10,16 @@ import { Order } from '@/types/table';
 export interface TableOption {
   defaultOrder: Order;
   defaultOrderBy: string;
-  defaultDataRowCount: number;
+  defaultRowPerPage: number;
   headerCells: HeaderCell[];
+  filters: Filters;
   style: React.CSSProperties;
+  handleRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
+  handleChangePage: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+    page: number,
+  ) => void;
+  handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface HeaderCell {
@@ -29,25 +37,8 @@ export default function DataTable({
   tableDataList: [];
   tableOption: TableOption;
 }) {
-  const [order, setOrder] = useState<Order>(tableOption.defaultOrder);
-  const [orderBy, setOrderBy] = useState(tableOption.defaultOrderBy);
-  const [rowsPerPage, setRowsPerPage] = useState(tableOption.defaultDataRowCount);
-  const [page, setPage] = useState(0);
-
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  const { filters, handleRequestSort, handleChangePage, handleChangeRowsPerPage } = tableOption;
+  const { order, orderBy, page, rowsPerPage } = filters;
 
   return (
     <Box sx={{ width: '100%', borderTop: 1, borderColor: '#eee' }}>
@@ -61,16 +52,16 @@ export default function DataTable({
             size={'medium'}
           >
             <HeaderRow
-              order={order}
-              orderBy={orderBy}
+              order={order || 'asc'}
+              orderBy={orderBy || 'id'}
               onRequestSort={handleRequestSort}
               headCells={tableOption?.headerCells}
             />
             <BodyRows
-              order={order}
-              orderBy={orderBy}
-              page={page}
-              rowsPerPage={rowsPerPage}
+              order={order || 'asc'}
+              orderBy={orderBy || 'id'}
+              page={Number(page)}
+              rowsPerPage={Number(rowsPerPage)}
               tableDataList={tableDataList}
               tableOption={tableOption}
             />
@@ -80,8 +71,8 @@ export default function DataTable({
           rowsPerPageOptions={[25, 50, 100]}
           component='div'
           count={tableDataList.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
+          rowsPerPage={Number(rowsPerPage)}
+          page={Number(page)}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />

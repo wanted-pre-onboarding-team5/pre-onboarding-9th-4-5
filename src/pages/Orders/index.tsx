@@ -11,13 +11,13 @@ import { useFetchOrder } from '@/hooks/useFetchOrder';
 import { getToday } from '@/utils/getToday';
 import { querySplit } from '@/utils/querySplit';
 
-interface SwitchOneApi {
-  id?: number;
+export interface Filters {
+  order?: string;
+  orderBy?: string;
+  page?: string;
+  rowsPerPage?: string;
+  status?: string;
   transaction_time?: string;
-  status?: boolean;
-  customer_id?: number;
-  customer_name?: string;
-  currency?: string;
 }
 
 export const Orders = () => {
@@ -25,27 +25,62 @@ export const Orders = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const filters = querySplit(searchParams.toString());
 
-  useEffect(() => {
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+    page: number,
+  ) => {
+    setSearchParams({ ...filters, page: page.toString() });
+  };
+
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
+    const isAsc = searchParams.get('orderBy') === property && searchParams.get('order') === 'asc';
+    setSearchParams({ ...filters, order: isAsc ? 'desc' : 'asc', orderBy: property });
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchParams({
-      page: 1,
-      status: 'all',
-      transaction_time: todayDate,
+      ...filters,
+      rowsPerPage: event.target.value,
+      page: TABLE_OPTIONS.defaultPage,
     });
-  }, []);
+  };
 
   const {
     data,
     isLoading,
   }: {
-    data: SwitchOneApi[] | undefined;
+    data: [] | undefined;
     isLoading: boolean;
-    error: boolean | null;
   } = useFetchOrder(filters);
+
+  useEffect(() => {
+    setSearchParams({
+      order: searchParams.get('order') || TABLE_OPTIONS.defaultOrder,
+      orderBy: searchParams.get('orderBy') || TABLE_OPTIONS.defaultOrderBy,
+      page: searchParams.get('page') || TABLE_OPTIONS.defaultPage,
+      rowsPerPage: searchParams.get('rowsPerPage') || TABLE_OPTIONS.defaultRowPerPage,
+      status: searchParams.get('status') || TABLE_OPTIONS.defaultStatus,
+      transaction_time: todayDate,
+    });
+  }, []);
 
   return (
     <Box sx={{ height: 800 }}>
       <FilterSection />
-      {isLoading ? <Spinner /> : <DataTable tableDataList={data} tableOption={TABLE_OPTIONS} />}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <DataTable
+          tableDataList={data || []}
+          tableOption={{
+            ...TABLE_OPTIONS,
+            filters,
+            handleRequestSort,
+            handleChangePage,
+            handleChangeRowsPerPage,
+          }}
+        />
+      )}
     </Box>
   );
 };

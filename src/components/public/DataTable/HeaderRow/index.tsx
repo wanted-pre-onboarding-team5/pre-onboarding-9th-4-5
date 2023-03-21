@@ -3,18 +3,16 @@ import { visuallyHidden } from '@mui/utils';
 
 import { HeaderCell } from '../index';
 
-import { Order } from '@/types/table';
-
 interface HeaderRowProps {
-  onRequestSort: (event: React.MouseEvent<unknown>, property) => void;
-  order: Order;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
+  order: string;
   orderBy: string;
   headCells: HeaderCell[];
 }
 
 export const HeaderRow = (props: HeaderRowProps) => {
   const { order, orderBy, onRequestSort, headCells } = props;
-  const createSortHandler = (property) => (event: React.MouseEvent<unknown>) => {
+  const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 

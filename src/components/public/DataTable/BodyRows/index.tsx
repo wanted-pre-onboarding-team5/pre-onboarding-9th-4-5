@@ -2,10 +2,8 @@ import { TableBody, TableCell, TableRow } from '@mui/material';
 
 import { TableOption } from '../index';
 
-import { Order } from '@/types/table';
-
 interface BodyRowsProps {
-  order: Order;
+  order: string;
   orderBy: string;
   page: number;
   rowsPerPage: number;
@@ -27,8 +25,8 @@ export const BodyRows = (props: BodyRowsProps) => {
   }
 
   function getComparator(
-    order: Order,
-    orderBy: Key,
+    order: string,
+    orderBy: string,
   ): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
     return order === 'desc'
       ? (a, b) => descendingComparator(a, b, orderBy)

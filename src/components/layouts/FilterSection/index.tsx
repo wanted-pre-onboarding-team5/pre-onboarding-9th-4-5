@@ -10,7 +10,7 @@ const FilterSection = () => {
   const filters = querySplit(searchParams.toString());
 
   const handleStatus = (event: React.MouseEvent<HTMLElement>, status: string) => {
-    setSearchParams({ ...filters, status });
+    setSearchParams({ ...filters, page: 0, status });
   };
 
   return <FilterRadios radios={FILTER_STATUS} filters={searchParams} handleStatus={handleStatus} />;
