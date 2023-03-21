@@ -1,6 +1,18 @@
 import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@mui/material';
+import { useSearchParams } from 'react-router-dom';
 
-const FilterRadios = ({ radios, filters, handleStatus }) => {
+import { FILTER_STATUS } from '@/constants';
+
+import { querySplit } from '@/utils/querySplit';
+
+const FilterRadios = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filters = querySplit(searchParams.toString());
+
+  const handleRadio = (event: React.ChangeEvent<HTMLInputElement>, status: string) => {
+    setSearchParams({ ...filters, page: '0', status });
+  };
+
   return (
     <FormControl
       sx={{
@@ -20,16 +32,16 @@ const FilterRadios = ({ radios, filters, handleStatus }) => {
           },
         }}
       >
-        {radios.label}
+        {FILTER_STATUS.label}
       </FormLabel>
       <RadioGroup
         row
         defaultValue='all'
         name='radio-buttons-group'
-        value={filters[radios.name]}
-        onChange={handleStatus}
+        value={filters[FILTER_STATUS.name]}
+        onChange={handleRadio}
       >
-        {radios.options.map((radio) => (
+        {FILTER_STATUS.options.map((radio) => (
           <FormControlLabel
             key={radio.value}
             value={radio.value}
