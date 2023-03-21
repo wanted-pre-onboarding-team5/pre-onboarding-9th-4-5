@@ -9,6 +9,7 @@ import { Order } from '@/types/table';
 export interface TableOption {
   defaultOrder: Order;
   defaultOrderBy: string;
+  defaultDataRowCount: number;
   headerCells: HeaderCell[];
 }
 
@@ -29,8 +30,8 @@ export default function DataTable({
 }) {
   const [order, setOrder] = useState<Order>(tableOption.defaultOrder);
   const [orderBy, setOrderBy] = useState(tableOption.defaultOrderBy);
+  const [rowsPerPage, setRowsPerPage] = useState(tableOption.defaultDataRowCount);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(50);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -70,6 +71,7 @@ export default function DataTable({
               page={page}
               rowsPerPage={rowsPerPage}
               tableDataList={tableDataList}
+              tableOption={tableOption}
             />
           </Table>
         </TableContainer>

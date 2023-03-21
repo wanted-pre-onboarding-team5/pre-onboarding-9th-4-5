@@ -1,7 +1,7 @@
-export const HEAD_CELLS = [
+const HEAD_CELLS = [
   {
     id: 'transaction_time',
-    align: 'left',
+    align: 'center',
     disablePadding: false,
     label: '거래일 & 거래시간',
     style: { width: '150px' },
@@ -52,3 +52,12 @@ export const FILTER_STATUS = {
     { label: '처리완료', value: 'false' },
   ],
 } as const;
+
+export const DEFAULT_DATA_ROW_COUNT = 50;
+
+export const TABLE_OPTIONS = {
+  defaultOrder: 'asc',
+  defaultOrderBy: 'id',
+  defaultDataRowCount: 50,
+  headerCells: HEAD_CELLS,
+};

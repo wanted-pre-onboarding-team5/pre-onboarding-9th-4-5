@@ -1,7 +1,5 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
 
-import { HEAD_CELLS } from '@/constants';
-
 import { Order } from '@/types/table';
 
 interface BodyRowsProps {
@@ -13,7 +11,7 @@ interface BodyRowsProps {
 }
 
 export const BodyRows = (props: BodyRowsProps) => {
-  const { tableDataList, order, orderBy, page, rowsPerPage } = props;
+  const { tableDataList, order, orderBy, page, rowsPerPage, tableOption } = props;
 
   function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -53,7 +51,7 @@ export const BodyRows = (props: BodyRowsProps) => {
         .map((row, index) => {
           return (
             <TableRow tabIndex={-1} key={index}>
-              {HEAD_CELLS.map((cell, index) => {
+              {tableOption.headerCells.map((cell, index) => {
                 return (
                   <TableCell
                     key={index}

@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
 import { useState } from 'react';
 
-import { HEAD_CELLS, FILTER_STATUS } from '@/constants';
+import { TABLE_OPTIONS, FILTER_STATUS } from '@/constants';
 
-import DataTable, { TableOption } from '@/components/public/DataTable';
+import DataTable from '@/components/public/DataTable';
 import FilterRadios from '@/components/public/FilterRadios';
 import Spinner from '@/components/public/Spinner';
 import { useFetchOrder } from '@/hooks/useFetchOrder';
@@ -17,12 +17,6 @@ interface SwitchOneApi {
   customer_name?: string;
   currency?: string;
 }
-
-const tableOption: TableOption = {
-  defaultOrder: 'asc',
-  defaultOrderBy: 'id',
-  headerCells: HEAD_CELLS,
-};
 
 export const Orders = () => {
   const todayDate = getToday();
@@ -44,7 +38,7 @@ export const Orders = () => {
   return (
     <Box sx={{ height: 800 }}>
       <FilterRadios radios={FILTER_STATUS} filters={filters} handleStatus={handleStatus} />
-      {isLoading ? <Spinner /> : <DataTable tableDataList={data} tableOption={tableOption} />}
+      {isLoading ? <Spinner /> : <DataTable tableDataList={data} tableOption={TABLE_OPTIONS} />}
     </Box>
   );
 };
