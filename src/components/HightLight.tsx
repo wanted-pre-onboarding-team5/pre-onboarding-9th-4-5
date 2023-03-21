@@ -9,7 +9,7 @@ const HightLight = ({ children, query }: HightLightProps) => {
   const parts = children.split(new RegExp(`(${query})`, 'gi'));
 
   return (
-    <Typography component='span'>
+    <Typography component='span' variant='body2'>
       {parts.map((part, index) =>
         part.toLowerCase() === query.toLowerCase() ? (
           <Typography component='mark' key={index}>
