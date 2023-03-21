@@ -13,9 +13,13 @@ export const useGetData = () => {
     queryKey: ['SwitchOneMockData'],
     queryFn: () => SwitchOneMockAPI(),
     staleTime: 5000,
-    select: (mockDatas) =>
-      mockDatas.filter((mockData: mockDataProps) =>
+    // refetchInterval: 5000,
+    // refetchIntervalInBackground: true,
+    select: (mockDatas) => {
+      const data = mockDatas.filter((mockData: mockDataProps) =>
         mockData.transaction_time.includes('2023-03-08'),
-      ),
+      );
+      return data;
+    },
   });
 };

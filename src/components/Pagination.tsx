@@ -1,15 +1,15 @@
 import { Button, ButtonGroup, Container } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 
-import { QueryData } from '@/types/queryData';
+import { useGetData } from '@/hooks/useGetData';
 
 interface PaginationProps {
-  getDatas: QueryData[];
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const Pagination = ({ getDatas, currentPage, setCurrentPage }: PaginationProps) => {
+export const Pagination = ({ currentPage, setCurrentPage }: PaginationProps) => {
+  const { data: getDatas } = useGetData();
   const [, setParams] = useSearchParams();
   let totalPage;
   let totalPageArray;

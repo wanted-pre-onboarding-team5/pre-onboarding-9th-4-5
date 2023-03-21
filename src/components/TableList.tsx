@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { TableHeader } from './TableHeader';
 import { TableItem } from './TableItem';
 
+import { useGetData } from '@/hooks/useGetData';
 import { QueryData } from '@/types/queryData';
 
 interface TabListProps {
@@ -11,10 +12,12 @@ interface TabListProps {
   currPage: number;
 }
 
-export const TableList = ({ getDatas, currentPage }: TabListProps) => {
-  const [isSortedCustomerId, setIsSortedCustomerId] = useState<boolean>(false);
+export const TableList = ({ currentPage }: TabListProps) => {
+  const { data: getDatas } = useGetData();
+  const [isSorted, setIsSorted] = useState<boolean>(false);
+  const [checkSortItem, setCheckSortItem] = useState<string>('');
   const [sortedCustomerId, setSortedCustomerId] = useState();
-
+  const [sortedTransactionTime, setSortedTransactionTime] = useState();
   const listPerPage = 50;
   const offset = (currentPage - 1) * listPerPage;
 
@@ -23,13 +26,21 @@ export const TableList = ({ getDatas, currentPage }: TabListProps) => {
       <Table sx={{ minWidth: 650 }} aria-label='switchOne-data-table'>
         <TableHeader
           getDatas={getDatas}
-          isSortedCustomerId={isSortedCustomerId}
-          setIsSortedCustomerId={setIsSortedCustomerId}
+          isSorted={isSorted}
+          setIsSorted={setIsSorted}
           setSortedCustomerId={setSortedCustomerId}
+          checkSortItem={checkSortItem}
+          setCheckSortItem={setCheckSortItem}
+          sortedTransactionTime={sortedTransactionTime}
+          setSortedTransactionTime={setSortedTransactionTime}
         />
         <TableBody>
-          {isSortedCustomerId
+          {checkSortItem === 'customerId' && isSorted
             ? sortedCustomerId
+                ?.slice(offset, offset + listPerPage)
+                .map((data) => <TableItem data={data} key={data.id} />)
+            : checkSortItem === 'transactionTime' && isSorted
+            ? sortedTransactionTime
                 ?.slice(offset, offset + listPerPage)
                 .map((data) => <TableItem data={data} key={data.id} />)
             : getDatas

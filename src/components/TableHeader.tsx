@@ -5,29 +5,36 @@ import { QueryData } from '@/types/queryData';
 
 interface TableHeaderProps {
   getDatas: QueryData[];
-  isSortedCustomerId: boolean;
-  setIsSortedCustomerId: Dispatch<SetStateAction<boolean>>;
+  isSorted: boolean;
+  setIsSorted: Dispatch<SetStateAction<boolean>>;
   setSortedCustomerId: (data: QueryData[]) => void;
+  checkSortItem: string;
+  setCheckSortItem: Dispatch<SetStateAction<string>>;
+  setSortedTransactionTime: (data: QueryData[]) => void;
 }
 
 export const TableHeader = ({
   getDatas,
-  isSortedCustomerId,
-  setIsSortedCustomerId,
+  isSorted,
+  setIsSorted,
   setSortedCustomerId,
+  setCheckSortItem,
+  setSortedTransactionTime,
 }: TableHeaderProps) => {
   const tableCellStyle = { fontWeight: 700, fontSize: 20, color: 'white', textAlign: 'center' };
 
-  const handleCustomerId = () => {
-    setIsSortedCustomerId(!isSortedCustomerId);
+  const handleCustomerId = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSorted(!isSorted);
+    setCheckSortItem(e.target.id);
     setSortedCustomerId(getDatas.sort((a, b) => b.customer_id - a.customer_id));
   };
 
-  const handleTransactionTime = () => {
-    // setIsSortedTransactionTime(!isSortedTransactionTime);
-    // setSortedTransactionTime(
-    //   getDatas.sort((a, b) => new Date(b.transaction_time) - new Date(a.transaction_time)),
-    // );
+  const handleTransactionTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSorted(!isSorted);
+    setCheckSortItem(e.target.id);
+    setSortedTransactionTime(
+      getDatas.sort((a, b) => new Date(b.transaction_time) - new Date(a.transaction_time)),
+    );
   };
   return (
     <TableHead>
@@ -40,6 +47,7 @@ export const TableHeader = ({
             textAlign: 'center',
             cursor: 'pointer',
           }}
+          id='customerId'
           onClick={handleCustomerId}
         >
           주문번호
@@ -54,6 +62,7 @@ export const TableHeader = ({
             textAlign: 'center',
             cursor: 'pointer',
           }}
+          id='transactionTime'
           onClick={handleTransactionTime}
         >
           거래 시간
