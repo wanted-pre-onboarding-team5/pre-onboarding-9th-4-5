@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { orderApiQueryKey } from '@/constants';
+import { DEFAULT_PAGE, orderApiQueryKey, TODAY } from '@/constants';
 
 import { OrderTableBody } from './OrderTableBody';
 import { OrderTableHead } from './OrderTableHead';
@@ -19,8 +19,8 @@ export const OrderTable = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    searchParams.set(orderApiQueryKey.DATE, '2023-03-08');
-    searchParams.set(orderApiQueryKey.PAGE, '1');
+    searchParams.set(orderApiQueryKey.DATE, TODAY);
+    searchParams.set(orderApiQueryKey.PAGE, DEFAULT_PAGE);
 
     setSearchParams(searchParams);
   }, []);
