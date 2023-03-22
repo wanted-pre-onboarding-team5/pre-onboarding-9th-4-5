@@ -1,22 +1,21 @@
-import { Typography, Stack, Paper, InputBase, Box, Chip } from '@mui/material';
+import { Typography, Stack, Paper, InputBase, Box, Chip, IconButton } from '@mui/material';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const TitleWithSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchInput, setSearchInput] = React.useState('');
   const search = searchParams.get('search');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const searchInputValue = formData.get('search-input') as string;
 
     if (searchParams.has('search')) {
       searchParams.delete('search');
     }
 
-    if (searchInputValue) {
-      searchParams.append('search', searchInputValue);
+    if (searchInput) {
+      searchParams.append('search', searchInput);
     }
     setSearchParams(searchParams);
   };
@@ -40,12 +39,14 @@ const TitleWithSearch = () => {
             border: '1px solid #efefef',
           }}
         >
-          <Box>🔍</Box>
+          <IconButton data-testid='search-customer-button'>🔍</IconButton>
           <InputBase
+            value={searchInput}
+            onChange={(event) => setSearchInput(event.target.value)}
             name='search-input'
             sx={{ ml: 1, flex: 1 }}
             placeholder='Search Customer'
-            inputProps={{ 'aria-label': 'search customer' }}
+            inputProps={{ 'aria-label': 'search-customer' }}
           />
         </Paper>
       </Stack>

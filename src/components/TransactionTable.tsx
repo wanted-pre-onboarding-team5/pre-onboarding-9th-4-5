@@ -64,6 +64,7 @@ const TransactionTable = () => {
                 <StyledTableCell size='small' sortDirection='desc' key={item.field}>
                   <TableSortLabel
                     direction='desc'
+                    data-testid={`transaction-table-head-${item.field}`}
                     active={sort === item.field}
                     onClick={() => {
                       if (searchParams.has('sort')) {
@@ -85,13 +86,13 @@ const TransactionTable = () => {
             )}
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody data-testid='transaction-table-body'>
           {processedDataArray
             .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
             .map((item) => (
               <TableRow key={item.id}>
-                <StyledTableCell>{item.id}</StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid='transaction-table-body-id'>{item.id}</StyledTableCell>
+                <StyledTableCell data-testid='transaction-table-body-customer'>
                   {search ? (
                     <>
                       <HightLight query={search}>{item.customer.name}</HightLight> (ID:
@@ -104,8 +105,10 @@ const TransactionTable = () => {
                   )}
                 </StyledTableCell>
                 <StyledTableCell>{item.currency}</StyledTableCell>
-                <StyledTableCell>{item.datetime}</StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid='transaction-table-body-datetime'>
+                  {item.datetime}
+                </StyledTableCell>
+                <StyledTableCell data-testid='transaction-table-body-status'>
                   <Typography
                     variant='body2'
                     color={item.status === 'approved' ? 'darkgreen' : 'red'}
