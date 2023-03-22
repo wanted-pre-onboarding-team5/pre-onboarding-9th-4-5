@@ -1,15 +1,22 @@
 import { TableCell, TableRow } from '@mui/material';
 
-export const TableItem = ({ data }) => {
+import { QueryData } from '@/types/queryData';
+interface TableItemProps {
+  data: QueryData;
+}
+
+export const TableItem = ({ data }: TableItemProps) => {
   const {
+    id,
     customer_id: customerID,
     customer_name: customerName,
     currency,
     transaction_time: transactionTime,
     status,
   } = data;
+
   return (
-    <TableRow key={data.id}>
+    <TableRow key={id}>
       <TableCell style={{ textAlign: 'center' }}>{customerID}</TableCell>
       <TableCell style={{ textAlign: 'center' }}>{customerName}</TableCell>
       <TableCell style={{ textAlign: 'center' }}>{currency}</TableCell>

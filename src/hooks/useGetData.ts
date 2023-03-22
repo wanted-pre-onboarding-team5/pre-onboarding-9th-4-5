@@ -12,7 +12,6 @@ export const useGetData = () => {
   return useQuery({
     queryKey: ['SwitchOneMockData'],
     queryFn: () => SwitchOneMockAPI(),
-    // staleTime: 5000,
     refetchInterval: 5000,
     refetchIntervalInBackground: true,
     select: (mockDatas) => {

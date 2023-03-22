@@ -18,6 +18,7 @@ export const TableHeader = ({
   isSorted,
   setIsSorted,
   setSortedCustomerId,
+  checkSortItem,
   setCheckSortItem,
   setSortedTransactionTime,
 }: TableHeaderProps) => {
@@ -51,6 +52,11 @@ export const TableHeader = ({
           onClick={handleCustomerId}
         >
           주문번호
+          {checkSortItem === 'customerId' && isSorted ? (
+            <span style={{ fontSize: 14, marginLeft: 20 }}>⏫</span>
+          ) : (
+            <span style={{ fontSize: 14, marginLeft: 20 }}>⏬</span>
+          )}
         </TableCell>
         <TableCell style={tableCellStyle}>고객명</TableCell>
         <TableCell style={tableCellStyle}>금액</TableCell>
@@ -66,6 +72,11 @@ export const TableHeader = ({
           onClick={handleTransactionTime}
         >
           거래 시간
+          {checkSortItem === 'transactionTime' && isSorted ? (
+            <span style={{ fontSize: 14, marginLeft: 20 }}>⏫</span>
+          ) : (
+            <span style={{ fontSize: 14, marginLeft: 20 }}>⏬</span>
+          )}
         </TableCell>
         <TableCell style={tableCellStyle}>상태</TableCell>
       </TableRow>
