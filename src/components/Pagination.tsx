@@ -1,6 +1,13 @@
 import { Stack, Button } from '@mui/material';
+import { Dispatch, SetStateAction } from 'react';
 
-export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: Dispatch<SetStateAction<number>>;
+}
+
+export const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
   const hasPrevPage = currentPage <= 1;
 
   const hasNextPage = currentPage >= totalPages;
