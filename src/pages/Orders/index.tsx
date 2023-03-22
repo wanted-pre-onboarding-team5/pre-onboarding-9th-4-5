@@ -48,6 +48,7 @@ export const Orders = () => {
   const {
     data,
     isLoading,
+    dataUpdatedAt,
   }: {
     data: [] | undefined;
     isLoading: boolean;
@@ -70,16 +71,21 @@ export const Orders = () => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <DataTable
-          tableDataList={data || []}
-          tableOption={{
-            ...TABLE_OPTIONS,
-            filters,
-            handleRequestSort,
-            handleChangePage,
-            handleChangeRowsPerPage,
-          }}
-        />
+        <>
+          <h5 style={{ margin: 0, textAlign: 'right' }}>
+            dataUpdatedAt: {new Date(dataUpdatedAt).toLocaleString()}
+          </h5>
+          <DataTable
+            tableDataList={data || []}
+            tableOption={{
+              ...TABLE_OPTIONS,
+              filters,
+              handleRequestSort,
+              handleChangePage,
+              handleChangeRowsPerPage,
+            }}
+          />
+        </>
       )}
     </Box>
   );
