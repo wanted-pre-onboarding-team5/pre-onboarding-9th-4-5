@@ -10,7 +10,7 @@ import {
   Button,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useSearchParams } from 'react-router-dom';
 
 // import { Pagination, SearchInput } from '@/components';
 import { ORDERDATA_MENU } from '@/constants';
@@ -18,19 +18,37 @@ import { ONEPAGE_SIZE } from '@/constants';
 
 import { Pagination } from '@/components/Pagination';
 import { SearchInput } from '@/components/SearchInput';
+import { mainLoader } from '@/router/mainLoader';
 import { OrderData } from '@/types/order';
 
-
 export const Main = () => {
-  const ResponseData = useLoaderData() as OrderData[];
-  const [orderData, setOrderData] = useState<OrderData[]>(ResponseData);
+  const [responseData, setResponseData] = useState<OrderData[]>(useLoaderData() as OrderData[]);
+  const [orderData, setOrderData] = useState<OrderData[]>(responseData);
 
-  //   const ResponseData = useLoaderData() as OrderData[];
   const [currentPage, setCurrentPage] = useState<number>(1);
   const startPage = ONEPAGE_SIZE * currentPage - ONEPAGE_SIZE;
   const finishPage = ONEPAGE_SIZE * currentPage;
 
   const [filterOption, setFilterOption] = useState<boolean | null>(null);
+
+  const [query] = useSearchParams();
+
+  useEffect(() => {
+    setCurrentPage(Number(query.get('pages')));
+
+    const intervalId = setInterval(async () => {
+      const data = await mainLoader();
+      setResponseData(data);
+    }, 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    setOrderData(responseData);
+  }, [responseData]);
 
   const useStatusFilterOrder = (data: OrderData[], status: boolean) => {
     return data.filter((el) => el.status === status);
@@ -38,13 +56,10 @@ export const Main = () => {
 
   useEffect(() => {
     if (filterOption !== null) {
-      setOrderData(useStatusFilterOrder(ResponseData, filterOption));
+      setOrderData(useStatusFilterOrder(responseData, filterOption));
     }
   }, [filterOption]);
 
-  //   const [orderData, setOrderData] = useState<OrderData[]>(ResponseData);
-
-  //   const [orderData, setOrderData] = useState<OrderData[]>(orderData.slice(startPage, finishPage));
   const [isAscending, setIsAscending] = useState<boolean>(true);
   const [isDateAscending, setIsDateAscending] = useState<boolean | null>(null);
 
@@ -89,74 +104,48 @@ export const Main = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          p: 1,
-          m: 1,
-        }}
-      >
+      <Box display='flex' justifyContent='center' my={5}>
         <Button onClick={() => setIsDateAscending(!isDateAscending)}>거래시간순</Button>
 
         <Button onClick={() => setIsAscending(!isAscending)}>주문번호순</Button>
 
-        {/* <Button>주문처리상태</Button> */}
-        <Button
-          //   color={filterOption ? 'blue.400' : 'gray.400'}
-          //   cursor='pointer'
-          onClick={() => setFilterOption(true)}
-        >
-          주문처리상태 O
-        </Button>
-        <Button
-          //   color={filterOption === false ? 'blue.400' : 'gray.400'}
-          //   cursor='pointer'
-          onClick={() => setFilterOption(false)}
-        >
-          주문처리상태 X
-        </Button>
+        <Button onClick={() => setFilterOption(!filterOption)}>주문처리상태 여부</Button>
       </Box>
-
-      <SearchInput onSearchChange={setSearchTerm} />
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-          <TableHead>
-            <TableRow>
-              {/* <TableCell onClick={() => setIsAscending(!isAscending)} cursor={'pointer'}>
-                주문번호 {isAscending ? '(오름차순)' : '(내림차순)'}
-              </TableCell>
-              <TableCell onClick={() => setIsDateAscending(!isDateAscending)} cursor={'pointer'}>
-                거래시간{' '}
-                {isDateAscending !== null && (isDateAscending ? '(오름차순)' : '(내림차순)')}
-              </TableCell>
-              <TableCell>주문처리상태</TableCell>
-              <TableCell>고객번호</TableCell>
-              <TableCell>고객이름</TableCell>
-              <TableCell>가격</TableCell> */}
-              {ORDERDATA_MENU.map((el, i) => (
-                <TableCell key={i}>{el}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          {orderData.slice(startPage, finishPage).map((el) => (
-            <TableBody key={el.id}>
-              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell>{el.id}</TableCell>
-                <TableCell>{el.transaction_time}</TableCell>
-                <TableCell>{el.status ? '완료' : '진행중'}</TableCell>
-                <TableCell>{el.customer_id}</TableCell>
-                <TableCell>{el.customer_name}</TableCell>
-                <TableCell>{el.currency}</TableCell>
+      <Box display='flex' justifyContent='center' my={5}>
+        <SearchInput onSearchChange={setSearchTerm} />
+      </Box>
+      <Box display='flex' justifyContent='center' my={5}>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }}>
+            <TableHead>
+              <TableRow>
+                {ORDERDATA_MENU.map((el, i) => (
+                  <TableCell key={i}>{el}</TableCell>
+                ))}
               </TableRow>
-            </TableBody>
-          ))}
-        </Table>
-      </TableContainer>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={Math.floor(orderData.length / ONEPAGE_SIZE)}
-        onPageChange={setCurrentPage}
-      />
+            </TableHead>
+            {orderData.slice(startPage, finishPage).map((el) => (
+              <TableBody key={el.id}>
+                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell>{el.id}</TableCell>
+                  <TableCell>{el.transaction_time}</TableCell>
+                  <TableCell>{el.status ? '완료' : '진행중'}</TableCell>
+                  <TableCell>{el.customer_id}</TableCell>
+                  <TableCell>{el.customer_name}</TableCell>
+                  <TableCell>{el.currency}</TableCell>
+                </TableRow>
+              </TableBody>
+            ))}
+          </Table>
+        </TableContainer>
+      </Box>
+      <Box display='flex' flexDirection='row' justifyContent='center'>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.floor(orderData.length / ONEPAGE_SIZE)}
+          onPageChange={setCurrentPage}
+        />
+      </Box>
     </>
   );
 };

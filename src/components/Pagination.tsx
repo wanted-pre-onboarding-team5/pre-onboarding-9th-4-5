@@ -1,5 +1,6 @@
 import { Stack, Button } from '@mui/material';
 import { Dispatch, SetStateAction } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 interface PaginationProps {
   currentPage: number;
@@ -12,6 +13,9 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
 
   const hasNextPage = currentPage >= totalPages;
 
+  const [query, setQuery] = useSearchParams();
+  query.get('page');
+
   const handlePrevPage = () => {
     onPageChange(currentPage - 1);
   };
@@ -21,6 +25,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
   };
 
   const handlePageClick = (page: number) => () => {
+    setQuery(`pages=${page}`);
     onPageChange(page);
   };
 
