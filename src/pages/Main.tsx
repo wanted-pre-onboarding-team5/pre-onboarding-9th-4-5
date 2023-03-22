@@ -1,15 +1,12 @@
-import { Box } from '@mui/material';
+import { Container } from '@mui/material';
 
-import { OrderListTable } from '@/components/OrderListTable';
-import { StatusSelect } from '@/components/StatusSelect';
+import { OrderListTable, OrderListForm } from '@/components';
 
 export const Main = () => {
   return (
-    <>
-      <Box display='flex' justifyContent='end' my={5}>
-        <StatusSelect />
-      </Box>
+    <Container>
+      <OrderListForm />
       <OrderListTable />
-    </>
+    </Container>
   );
 };

@@ -6,7 +6,7 @@ const columns: GridColDef[] = [
   {
     field: 'id',
     headerName: '주문번호',
-    width: 200,
+    width: 100,
     align: 'center',
     headerAlign: 'center',
     disableColumnMenu: true,
@@ -15,7 +15,7 @@ const columns: GridColDef[] = [
   {
     field: 'transaction_time',
     headerName: '거래시간',
-    width: 450,
+    width: 350,
     align: 'center',
     headerAlign: 'center',
     disableColumnMenu: true,
@@ -24,7 +24,7 @@ const columns: GridColDef[] = [
   {
     field: 'status',
     headerName: '주문처리상태',
-    width: 200,
+    width: 100,
     align: 'center',
     headerAlign: 'center',
     sortable: false,
@@ -33,7 +33,7 @@ const columns: GridColDef[] = [
   {
     field: 'customer_id',
     headerName: '고객번호',
-    width: 200,
+    width: 100,
     align: 'center',
     headerAlign: 'center',
     sortable: false,
@@ -42,7 +42,7 @@ const columns: GridColDef[] = [
   {
     field: 'customer_name',
     headerName: '고객이름',
-    width: 450,
+    width: 350,
     align: 'center',
     headerAlign: 'center',
     sortable: false,
@@ -51,7 +51,7 @@ const columns: GridColDef[] = [
   {
     field: 'currency',
     headerName: '가격',
-    width: 120,
+    width: 100,
     align: 'center',
     headerAlign: 'center',
     sortable: false,

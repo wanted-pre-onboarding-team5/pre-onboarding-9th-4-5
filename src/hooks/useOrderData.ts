@@ -5,13 +5,11 @@ import { useSearchParams } from 'react-router-dom';
 
 import { OrderData } from '@/types';
 
+import { getOrderData } from '@/api/order';
+
 export const useOrderData = () => {
-  const { data } = useQuery(['orderList'], async () => {
-    const response = await fetch('/mock_data.json');
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
+  const { data } = useQuery(['orderList'], getOrderData, {
+    refetchInterval: 5000,
   });
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,6 +20,12 @@ export const useOrderData = () => {
   if (params.status) {
     orderData = orderData.filter((order: OrderData) =>
       params.status === 'all' ? true : params.status === 'true' ? order.status : !order.status,
+    );
+  }
+
+  if (params.name) {
+    orderData = orderData.filter((order: OrderData) =>
+      order.customer_name.toLocaleLowerCase().includes((params.name as string).toLocaleLowerCase()),
     );
   }
 

@@ -7,7 +7,7 @@ import Select from '@mui/material/Select';
 import { useForm } from '../hooks/useForm';
 
 export const StatusSelect = () => {
-  const { status, handleChange } = useForm();
+  const { status, handleSelectChange } = useForm();
 
   return (
     <Box width='150px'>
@@ -17,7 +17,7 @@ export const StatusSelect = () => {
           labelId='status'
           value={status as string}
           label='주문처리상태'
-          onChange={handleChange}
+          onChange={handleSelectChange}
         >
           <MenuItem value={'all'}>전체</MenuItem>
           <MenuItem value={'true'}>true</MenuItem>
