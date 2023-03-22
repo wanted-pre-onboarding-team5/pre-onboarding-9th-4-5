@@ -34,7 +34,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       <Button isDisabled={hasPrevPage} onClick={handlePrevPage}>
         이전
       </Button>
-      {Array.from({ length: totalPages }, (_, i) => (
+      {Array.from({ length: totalPages }, (el, i) => (
         <Button
           key={i}
           variant={i + 1 === currentPage ? 'solid' : 'ghost'}
