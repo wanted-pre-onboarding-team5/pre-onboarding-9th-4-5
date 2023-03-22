@@ -8,9 +8,11 @@ import { useSearchParams } from 'react-router-dom';
 
 import { DEFAULT_PAGE, orderApiQueryKey, TODAY } from '@/constants';
 
+import { TablePagination } from '../OrderTableTools/TablePagination';
+import SearchForm from '../OrderTableTools/TableSearchForm';
+
 import { OrderTableBody } from './OrderTableBody';
 import { OrderTableHead } from './OrderTableHead';
-import { TablePagination } from './TablePagination';
 
 import getOrderData from '@/api/orderList';
 import { SortType, StatusType } from '@/types/props';
@@ -47,6 +49,7 @@ export const OrderTable = () => {
     <>
       {isSuccess ? (
         <Box sx={{ width: 1, backgroundColor: 'white' }}>
+          <SearchForm />
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <OrderTableHead />
