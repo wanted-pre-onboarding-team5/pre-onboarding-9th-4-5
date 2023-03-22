@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import { Container } from '@mui/system';
 
 import FilterBox from '@/components/FilterBox';
-import TitleWithSearch from '@/components/TitleWithSearch';
+import TableTitle from '@/components/TableTitle';
 import TransactionTable from '@/components/TransactionTable';
 import useIntervalRevalidate from '@/hooks/useIntervalRevalidate';
 
@@ -12,7 +12,7 @@ const Main = () => {
   return (
     <Container maxWidth='md'>
       <Stack spacing={2} marginTop={4}>
-        <TitleWithSearch />
+        <TableTitle />
         <FilterBox />
         <TransactionTable />
       </Stack>
