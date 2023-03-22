@@ -1,19 +1,18 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
 
-import { HEAD_CELLS } from '@/constants';
-
-import { Order } from '@/types/table';
+import { TableOption } from '../index';
 
 interface BodyRowsProps {
-  order: Order;
+  order: string;
   orderBy: string;
   page: number;
   rowsPerPage: number;
   tableDataList: [];
+  tableOption: TableOption;
 }
 
 export const BodyRows = (props: BodyRowsProps) => {
-  const { tableDataList, order, orderBy, page, rowsPerPage } = props;
+  const { tableDataList, order, orderBy, page, rowsPerPage, tableOption } = props;
 
   function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -26,8 +25,8 @@ export const BodyRows = (props: BodyRowsProps) => {
   }
 
   function getComparator(
-    order: Order,
-    orderBy: Key,
+    order: string,
+    orderBy: string,
   ): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
     return order === 'desc'
       ? (a, b) => descendingComparator(a, b, orderBy)
@@ -53,13 +52,13 @@ export const BodyRows = (props: BodyRowsProps) => {
         .map((row, index) => {
           return (
             <TableRow tabIndex={-1} key={index}>
-              {HEAD_CELLS.map((cell, index) => {
+              {tableOption.headerCells.map((cell, index) => {
                 return (
                   <TableCell
                     key={index}
                     align={cell.align}
                     padding={cell.disablePadding ? 'none' : 'normal'}
-                    sx={{ ...cell.style, border: '1px solid #eee' }}
+                    sx={{ ...cell.style, border: '1px solid #eee', borderBottomColor: '#bbb' }}
                   >
                     {String(row[cell.id])}
                   </TableCell>

@@ -1,50 +1,92 @@
 import { Box } from '@mui/material';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-import { HEAD_CELLS, FILTER_STATUS } from '@/constants';
+import { TABLE_OPTIONS } from '@/constants';
 
-import DataTable, { TableOption } from '@/components/public/DataTable';
-import FilterRadios from '@/components/public/FilterRadios';
+import FilterSection from '@/components/layouts/FilterSection';
+import DataTable from '@/components/public/DataTable';
 import Spinner from '@/components/public/Spinner';
 import { useFetchOrder } from '@/hooks/useFetchOrder';
 import { getToday } from '@/utils/getToday';
+import { querySplit } from '@/utils/querySplit';
 
-interface SwitchOneApi {
-  id?: number;
+export interface Filters {
+  order?: string;
+  orderBy?: string;
+  page?: string;
+  rowsPerPage?: string;
+  status?: string;
   transaction_time?: string;
-  status?: boolean;
-  customer_id?: number;
-  customer_name?: string;
-  currency?: string;
 }
-
-const tableOption: TableOption = {
-  defaultOrder: 'asc',
-  defaultOrderBy: 'id',
-  headerCells: HEAD_CELLS,
-};
 
 export const Orders = () => {
   const todayDate = getToday();
-  const [filters, setFilters] = useState({ transaction_time: todayDate, status: 'all' });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filters = querySplit(searchParams.toString());
 
-  const handleStatus = (event: React.MouseEvent<HTMLElement>, status: string) => {
-    setFilters({ ...filters, status });
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+    page: number,
+  ) => {
+    setSearchParams({ ...filters, page: page.toString() });
+  };
+
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
+    const isAsc = searchParams.get('orderBy') === property && searchParams.get('order') === 'asc';
+    setSearchParams({ ...filters, order: isAsc ? 'desc' : 'asc', orderBy: property });
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams({
+      ...filters,
+      rowsPerPage: event.target.value,
+      page: TABLE_OPTIONS.defaultPage,
+    });
   };
 
   const {
     data,
     isLoading,
+    dataUpdatedAt,
   }: {
-    data: SwitchOneApi[] | undefined;
+    data: [] | undefined;
     isLoading: boolean;
-    error: boolean | null;
-  } = useFetchOrder(filters);
+  } = useFetchOrder(filters, { refetchInterval: 5000 });
+
+  useEffect(() => {
+    setSearchParams({
+      order: searchParams.get('order') || TABLE_OPTIONS.defaultOrder,
+      orderBy: searchParams.get('orderBy') || TABLE_OPTIONS.defaultOrderBy,
+      page: searchParams.get('page') || TABLE_OPTIONS.defaultPage,
+      rowsPerPage: searchParams.get('rowsPerPage') || TABLE_OPTIONS.defaultRowPerPage,
+      status: searchParams.get('status') || TABLE_OPTIONS.defaultStatus,
+      transaction_time: todayDate,
+    });
+  }, []);
 
   return (
     <Box sx={{ height: 800 }}>
-      <FilterRadios radios={FILTER_STATUS} filters={filters} handleStatus={handleStatus} />
-      {isLoading ? <Spinner /> : <DataTable tableDataList={data} tableOption={tableOption} />}
+      <FilterSection />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <h5 style={{ margin: 0, textAlign: 'right' }}>
+            dataUpdatedAt: {new Date(dataUpdatedAt).toLocaleString()}
+          </h5>
+          <DataTable
+            tableDataList={data || []}
+            tableOption={{
+              ...TABLE_OPTIONS,
+              filters,
+              handleRequestSort,
+              handleChangePage,
+              handleChangeRowsPerPage,
+            }}
+          />
+        </>
+      )}
     </Box>
   );
 };

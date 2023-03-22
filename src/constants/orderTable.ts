@@ -1,7 +1,7 @@
-export const HEAD_CELLS = [
+const HEAD_CELLS = [
   {
     id: 'transaction_time',
-    align: 'left',
+    align: 'center',
     disablePadding: false,
     label: '거래일 & 거래시간',
     style: { width: '150px' },
@@ -22,10 +22,10 @@ export const HEAD_CELLS = [
   },
   {
     id: 'customer_name',
-    align: 'left',
+    align: 'center',
     disablePadding: false,
     label: '고객이름',
-    style: { fontWeight: 700 },
+    style: { fontWeight: 700, textAlign: 'left' },
   },
   {
     id: 'currency',
@@ -51,4 +51,13 @@ export const FILTER_STATUS = {
     { label: '처리중', value: 'true' },
     { label: '처리완료', value: 'false' },
   ],
+} as const;
+
+export const TABLE_OPTIONS = {
+  headerCells: HEAD_CELLS,
+  defaultOrder: 'asc',
+  defaultOrderBy: 'id',
+  defaultPage: '0',
+  defaultStatus: 'all',
+  defaultRowPerPage: '50',
 } as const;
