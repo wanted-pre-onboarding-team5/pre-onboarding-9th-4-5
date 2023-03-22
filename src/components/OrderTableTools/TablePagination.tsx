@@ -3,9 +3,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Button, IconButton, Stack } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 
-import { orderApiQueryKey } from '@/constants';
-
-import { PAGINATION_PER_PAGE } from '@/api/orderList';
+import { orderApiQueryKey, PAGINATION_PER_PAGE } from '@/constants';
 
 export const TablePagination = ({ totalCount }: { totalCount: number }) => {
   const [searchParams, setSearchParams] = useSearchParams();
