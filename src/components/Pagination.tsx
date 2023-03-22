@@ -1,15 +1,15 @@
 import { Button, ButtonGroup, Container } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 
-import { QueryData } from '@/types/queryData';
+import { useGetData } from '@/hooks/useGetData';
 
 interface PaginationProps {
-  getDatas: QueryData[];
-  currPage: number;
-  setCurrPage: React.Dispatch<React.SetStateAction<number>>;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const Pagination = ({ getDatas, currPage, setCurrPage }: PaginationProps) => {
+export const Pagination = ({ currentPage, setCurrentPage }: PaginationProps) => {
+  const { data: getDatas } = useGetData();
   const [, setParams] = useSearchParams();
   let totalPage;
   let totalPageArray;
@@ -23,17 +23,17 @@ export const Pagination = ({ getDatas, currPage, setCurrPage }: PaginationProps)
   }
 
   const prevPageClick = () => {
-    setCurrPage(currPage - 1);
-    setParams({ page: currPage - 1 });
+    setCurrentPage(currentPage - 1);
+    setParams({ page: currentPage - 1 });
   };
 
   const nextPageClick = () => {
-    setCurrPage(currPage + 1);
-    setParams({ page: currPage + 1 });
+    setCurrentPage(currentPage + 1);
+    setParams({ page: currentPage + 1 });
   };
 
   const currentPageClick = (page) => {
-    setCurrPage(page);
+    setCurrentPage(page);
     setParams({ page: page });
   };
 
@@ -42,7 +42,7 @@ export const Pagination = ({ getDatas, currPage, setCurrPage }: PaginationProps)
       style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 20 }}
     >
       <ButtonGroup size='large' color='inherit' style={{ backgroundColor: 'orange' }}>
-        <Button onClick={prevPageClick} disabled={currPage === 1} style={{ color: 'white' }}>
+        <Button onClick={prevPageClick} disabled={currentPage === 1} style={{ color: 'white' }}>
           &lt;
         </Button>
         {totalPageArray?.map((currentPage) => (
@@ -56,7 +56,7 @@ export const Pagination = ({ getDatas, currPage, setCurrPage }: PaginationProps)
         ))}
         <Button
           onClick={nextPageClick}
-          disabled={currPage === totalPage}
+          disabled={currentPage === totalPage}
           style={{ color: 'white' }}
         >
           &gt;

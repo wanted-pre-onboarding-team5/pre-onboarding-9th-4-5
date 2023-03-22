@@ -1,85 +1,59 @@
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import { Paper, Table, TableBody, TableContainer } from '@mui/material';
 import { useState } from 'react';
 
+import { TableHeader } from './TableHeader';
 import { TableItem } from './TableItem';
 
+import { useGetData } from '@/hooks/useGetData';
 import { QueryData } from '@/types/queryData';
 
 interface TabListProps {
-  getDatas: QueryData[];
-  currPage: number;
+  searchResult: QueryData[];
+  currentPage: number;
 }
 
-export const TableList = ({ getDatas, currPage }: TabListProps) => {
-  const [isSortedCustomerId, setIsSortedCustomerId] = useState(false);
+export const TableList = ({ currentPage, searchResult }: TabListProps) => {
+  const { data: getDatas } = useGetData();
+  const [isSorted, setIsSorted] = useState<boolean>(false);
+  const [checkSortItem, setCheckSortItem] = useState<string>('');
   const [sortedCustomerId, setSortedCustomerId] = useState();
-
+  const [sortedTransactionTime, setSortedTransactionTime] = useState();
   const listPerPage = 50;
-  const offset = (currPage - 1) * listPerPage;
-  const tableCellStyle = { fontWeight: 700, fontSize: 20, color: 'white', textAlign: 'center' };
-
-  const handleCustomerId = () => {
-    setIsSortedCustomerId(!isSortedCustomerId);
-    setSortedCustomerId(getDatas.sort((a, b) => b.customer_id - a.customer_id));
-  };
-
-  const handleTransactionTime = () => {
-    // setIsSortedTransactionTime(!isSortedTransactionTime);
-    // setSortedTransactionTime(
-    //   getDatas.sort((a, b) => new Date(b.transaction_time) - new Date(a.transaction_time)),
-    // );
-  };
+  const offset = (currentPage - 1) * listPerPage;
 
   return (
     <TableContainer component={Paper} sx={{ maxHeight: 650 }}>
       <Table sx={{ minWidth: 650 }} aria-label='switchOne-data-table'>
-        <TableHead>
-          <TableRow style={{ backgroundColor: 'orange' }}>
-            <TableCell
-              style={{
-                fontWeight: 700,
-                fontSize: 20,
-                color: 'white',
-                textAlign: 'center',
-                cursor: 'pointer',
-              }}
-              onClick={handleCustomerId}
-            >
-              주문번호
-            </TableCell>
-            <TableCell style={tableCellStyle}>고객명</TableCell>
-            <TableCell style={tableCellStyle}>금액</TableCell>
-            <TableCell
-              style={{
-                fontWeight: 700,
-                fontSize: 20,
-                color: 'white',
-                textAlign: 'center',
-                cursor: 'pointer',
-              }}
-              onClick={handleTransactionTime}
-            >
-              거래 시간
-            </TableCell>
-            <TableCell style={tableCellStyle}>상태</TableCell>
-          </TableRow>
-        </TableHead>
+        <TableHeader
+          getDatas={getDatas}
+          isSorted={isSorted}
+          setIsSorted={setIsSorted}
+          setSortedCustomerId={setSortedCustomerId}
+          checkSortItem={checkSortItem}
+          setCheckSortItem={setCheckSortItem}
+          sortedTransactionTime={sortedTransactionTime}
+          setSortedTransactionTime={setSortedTransactionTime}
+        />
         <TableBody>
-          {isSortedCustomerId
+          {/* 주문번호 정렬 */}
+          {checkSortItem === 'customerId' && isSorted
             ? sortedCustomerId
+                ?.slice(offset, offset + listPerPage)
+                .map((data) => <TableItem data={data} key={data.id} />)
+            : // 거래 시간 정렬
+            checkSortItem === 'transactionTime' && isSorted
+            ? sortedTransactionTime
+                ?.slice(offset, offset + listPerPage)
+                .map((data) => <TableItem data={data} key={data.id} />)
+            : // 이름 필터
+            searchResult
+            ? searchResult
                 ?.slice(offset, offset + listPerPage)
                 .map((data) => <TableItem data={data} key={data.id} />)
             : getDatas
                 ?.slice(offset, offset + listPerPage)
                 .map((data) => <TableItem data={data} key={data.id} />)}
+          {/* 다 아니라면 */}
         </TableBody>
       </Table>
     </TableContainer>
