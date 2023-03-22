@@ -9,6 +9,15 @@ const statusFilterFn = (data: TransformedObject, status: string) => {
   return data.status === status;
 };
 
+const searchFilterFn = (data: TransformedObject, search: string) => {
+  const [firstname, lastname] = data.customer.name.split(' ');
+  const lowerCased = search.toLowerCase();
+
+  return (
+    firstname.toLowerCase().includes(lowerCased) || lastname.toLowerCase().includes(lowerCased)
+  );
+};
+
 const descendingComparator = <T>(a: T, b: T, sortBy: keyof T) => {
   if (b[sortBy] < a[sortBy]) {
     return -1;
@@ -35,22 +44,27 @@ export const processData = (
     status: string | null;
     datetime: string | null;
     sort: 'id' | 'datetime';
+    search: string | null;
   },
 ): TransformedData => {
-  const { status, datetime, sort } = filterAndSortOptions;
+  const { status, datetime, sort, search } = filterAndSortOptions;
   const transformedData = transformRawData(rawData);
 
   return transformedData
     .filter((data) => {
       let flag1 = true;
       let flag2 = true;
+      let flag3 = true;
       if (status) {
         flag1 = statusFilterFn(data, status);
       }
       if (datetime) {
         flag2 = dateFilterFn(data, datetime);
       }
-      return flag1 && flag2;
+      if (search) {
+        flag3 = searchFilterFn(data, search);
+      }
+      return flag1 && flag2 && flag3;
     })
     .sort((a, b) => descendingComparator(a, b, sort));
 };

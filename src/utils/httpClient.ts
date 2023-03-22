@@ -6,6 +6,7 @@ export const httpClient = async (url: string, options = {}) => {
     }
     return await response.json();
   } catch (error) {
-    throw console.error('Fetch Error:', error instanceof Error ? error.message : error);
+    console.error('Fetch Error:', error instanceof Error ? error.message : error);
+    throw new Error('HTTP Error2');
   }
 };

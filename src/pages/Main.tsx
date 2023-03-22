@@ -4,11 +4,14 @@ import { Container } from '@mui/system';
 import FilterBox from '@/components/FilterBox';
 import TitleWithSearch from '@/components/TitleWithSearch';
 import TransactionTable from '@/components/TransactionTable';
+import useIntervalRevalidate from '@/hooks/useIntervalRevalidate';
 
 const Main = () => {
+  useIntervalRevalidate(5000);
+
   return (
     <Container maxWidth='md'>
-      <Stack spacing={4} marginTop={4}>
+      <Stack spacing={2} marginTop={4}>
         <TitleWithSearch />
         <FilterBox />
         <TransactionTable />

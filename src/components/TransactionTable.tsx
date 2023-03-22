@@ -14,6 +14,8 @@ import {
 import * as React from 'react';
 import { useLoaderData, useSearchParams } from 'react-router-dom';
 
+import HightLight from './HightLight';
+
 import type { ResponseData } from '@/types/responseData';
 
 import { TABLE_HEAD_CONTEXT, ROWS_PER_PAGE } from '@/constants/table';
@@ -40,9 +42,10 @@ const TransactionTable = () => {
   const sort = searchParams.get('sort') as 'id' | 'datetime';
   const status = searchParams.get('status');
   const datetime = searchParams.get('datetime');
+  const search = searchParams.get('search');
 
   const loaderData = useLoaderData() as ResponseData;
-  const processedDataArray = processData(loaderData, { sort, datetime, status });
+  const processedDataArray = processData(loaderData, { sort, datetime, status, search });
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -61,6 +64,7 @@ const TransactionTable = () => {
                 <StyledTableCell size='small' sortDirection='desc' key={item.field}>
                   <TableSortLabel
                     direction='desc'
+                    data-testid={`transaction-table-head-${item.field}`}
                     active={sort === item.field}
                     onClick={() => {
                       if (searchParams.has('sort')) {
@@ -82,18 +86,29 @@ const TransactionTable = () => {
             )}
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody data-testid='transaction-table-body'>
           {processedDataArray
             .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
             .map((item) => (
               <TableRow key={item.id}>
-                <StyledTableCell>{item.id}</StyledTableCell>
-                <StyledTableCell>
-                  {item.customer.name} (ID: {item.customer.id})
+                <StyledTableCell data-testid='transaction-table-body-id'>{item.id}</StyledTableCell>
+                <StyledTableCell data-testid='transaction-table-body-customer'>
+                  {search ? (
+                    <>
+                      <HightLight query={search}>{item.customer.name}</HightLight> (ID:
+                      {item.customer.id})
+                    </>
+                  ) : (
+                    <>
+                      {item.customer.name} (ID: {item.customer.id})
+                    </>
+                  )}
                 </StyledTableCell>
                 <StyledTableCell>{item.currency}</StyledTableCell>
-                <StyledTableCell>{item.datetime}</StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid='transaction-table-body-datetime'>
+                  {item.datetime}
+                </StyledTableCell>
+                <StyledTableCell data-testid='transaction-table-body-status'>
                   <Typography
                     variant='body2'
                     color={item.status === 'approved' ? 'darkgreen' : 'red'}

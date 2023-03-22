@@ -19,6 +19,7 @@ const StatusFilter = () => {
           <FormControlLabel
             key={status}
             value={status}
+            data-testid={`status-filter-${status}`}
             control={<Radio size='small' />}
             label={<Typography variant='body2'>{capitalizeFirstLetter(status)}</Typography>}
             onClick={() => {
