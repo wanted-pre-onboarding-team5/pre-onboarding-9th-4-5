@@ -1,9 +1,20 @@
 import { Stack, Button } from '@mui/material';
+import { Dispatch, SetStateAction } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: Dispatch<SetStateAction<number>>;
+}
+
+export const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
   const hasPrevPage = currentPage <= 1;
 
   const hasNextPage = currentPage >= totalPages;
+
+  const [query, setQuery] = useSearchParams();
+  query.get('page');
 
   const handlePrevPage = () => {
     onPageChange(currentPage - 1);
@@ -14,6 +25,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   const handlePageClick = (page: number) => () => {
+    setQuery(`pages=${page}`);
     onPageChange(page);
   };
 
@@ -22,7 +34,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <Button isDisabled={hasPrevPage} onClick={handlePrevPage}>
         이전
       </Button>
-      {Array.from({ length: totalPages }, (_, i) => (
+      {Array.from({ length: totalPages }, (el, i) => (
         <Button
           key={i}
           variant={i + 1 === currentPage ? 'solid' : 'ghost'}

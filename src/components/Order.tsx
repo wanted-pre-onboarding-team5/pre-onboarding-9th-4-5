@@ -15,7 +15,7 @@ export const Order = ({
     <TableBody>
       <TableCell>{id}</TableCell>
       <TableCell>{transaction_time}</TableCell>
-      <TableCell>{status ? 'O' : 'X'}</TableCell>
+      <TableCell>{status ? '완료' : '진행중'}</TableCell>
       <TableCell>{customer_id}</TableCell>
       <TableCell>{customer_name}</TableCell>
       <TableCell>{currency}</TableCell>
