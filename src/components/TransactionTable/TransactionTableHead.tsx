@@ -5,9 +5,18 @@ import StyledTableCell from './StyledTableCell';
 
 import { TABLE_HEAD_CONTEXT } from '@/constants/table';
 
-const HeadRow = () => {
+const TransactionTableHead = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const sort = searchParams.get('sort') as 'id' | 'datetime';
+  const sort = searchParams.get('sort') as 'id' | 'transaction_time';
+
+  const onClickControlSort = (item: (typeof TABLE_HEAD_CONTEXT)[number]) => {
+    if (searchParams.has('sort')) {
+      searchParams.delete('sort');
+    }
+
+    searchParams.append('sort', item.field);
+    setSearchParams(searchParams);
+  };
 
   return (
     <TableHead>
@@ -19,14 +28,7 @@ const HeadRow = () => {
                 direction='desc'
                 data-testid={`transaction-table-head-${item.field}`}
                 active={sort === item.field}
-                onClick={() => {
-                  if (searchParams.has('sort')) {
-                    searchParams.delete('sort');
-                  }
-
-                  searchParams.append('sort', item.field);
-                  setSearchParams(searchParams);
-                }}
+                onClick={() => onClickControlSort(item)}
               >
                 {item.label}
               </TableSortLabel>
@@ -42,4 +44,4 @@ const HeadRow = () => {
   );
 };
 
-export default HeadRow;
+export default TransactionTableHead;

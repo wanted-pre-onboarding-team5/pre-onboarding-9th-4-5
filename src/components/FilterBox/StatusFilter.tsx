@@ -5,7 +5,18 @@ import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter';
 
 const StatusFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const statusArray = ['all', 'approved', 'rejected'];
+  const statusType = ['all', 'completed', 'proceeding'] as const;
+
+  const onClickControlLabel = (status: (typeof statusType)[number]) => {
+    if (searchParams.has('status')) {
+      searchParams.delete('status');
+    }
+
+    if (status !== 'all') {
+      searchParams.append('status', status);
+    }
+    setSearchParams(searchParams);
+  };
 
   return (
     <FormControl>
@@ -15,23 +26,14 @@ const StatusFilter = () => {
         value={searchParams.get('status') || 'all'}
         row
       >
-        {statusArray.map((status) => (
+        {statusType.map((status) => (
           <FormControlLabel
             key={status}
             value={status}
             data-testid={`status-filter-${status}`}
             control={<Radio size='small' />}
             label={<Typography variant='body2'>{capitalizeFirstLetter(status)}</Typography>}
-            onClick={() => {
-              if (searchParams.has('status')) {
-                searchParams.delete('status');
-              }
-
-              if (status !== 'all') {
-                searchParams.append('status', status);
-              }
-              setSearchParams(searchParams);
-            }}
+            onClick={() => onClickControlLabel(status)}
           />
         ))}
       </RadioGroup>
