@@ -6,10 +6,10 @@ import StatusFilter from './StatusFilter';
 
 const FilterBox = () => {
   return (
-    <Stack direction='row' justifyContent='space-between'>
+    <Stack direction='row' justifyContent='space-between' spacing={2}>
+      <DateFilter />
       <SearchFilter />
       <Box flex={1} />
-      <DateFilter />
       <StatusFilter />
     </Stack>
   );

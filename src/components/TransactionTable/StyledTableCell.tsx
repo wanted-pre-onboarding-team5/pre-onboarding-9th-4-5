@@ -8,6 +8,7 @@ const StyledTableCell = styled(TableCell)(() => ({
     borderBottom: '1px solid #cecece',
     color: '#1B2E57',
     fontWeight: 'bold',
+    backgroundColor: '#ffb266',
   },
   [`&.${tableCellClasses.body}`]: {
     borderBottom: '1px solid #eeefef',

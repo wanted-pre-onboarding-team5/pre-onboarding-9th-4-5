@@ -31,9 +31,24 @@ const StatusFilter = () => {
             key={status}
             value={status}
             data-testid={`status-filter-${status}`}
-            control={<Radio size='small' />}
+            control={
+              <Radio
+                size='small'
+                sx={{
+                  color: '#F7941C',
+                  '&.Mui-checked': {
+                    color: '#F7941C',
+                  },
+                }}
+              />
+            }
             label={<Typography variant='body2'>{capitalizeFirstLetter(status)}</Typography>}
             onClick={() => onClickControlLabel(status)}
+            sx={{
+              '&.Mui-focused': {
+                color: '#F7941C',
+              },
+            }}
           />
         ))}
       </RadioGroup>

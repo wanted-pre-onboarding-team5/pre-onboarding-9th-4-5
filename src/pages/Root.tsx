@@ -1,14 +1,14 @@
-import { Container } from '@mui/material';
+import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 import Header from '@/components/Header';
 
 const Root = () => {
   return (
-    <Container>
+    <Box>
       <Header />
       <Outlet />
-    </Container>
+    </Box>
   );
 };
 
