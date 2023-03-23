@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Header = () => {
   return (
     <Container maxWidth='md' sx={{ marginTop: 2 }}>
-      <Link to='/'>
+      <Link to='/?datetime=2023-03-08'>
         <Box
           component='img'
           style={{ width: '120px' }}
