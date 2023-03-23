@@ -1,16 +1,17 @@
-import type { ResponseData, TransformedData, TransformedObject } from '@/types/responseData';
+import type { ResponseData, ResponseObject } from '@/types/responseData';
 
-const dateFilterFn = (data: TransformedObject, date: string) => {
-  const [_date] = data.datetime.split(' ');
+const dateFilter = (data: ResponseObject, date: string) => {
+  const [_date] = data.transaction_time.split(' ');
   return _date === date;
 };
 
-const statusFilterFn = (data: TransformedObject, status: string) => {
-  return data.status === status;
+const statusFilter = (data: ResponseObject, status: string) => {
+  const statusLabel = data.status ? 'completed' : 'proceeding';
+  return statusLabel === status;
 };
 
-const searchFilterFn = (data: TransformedObject, search: string) => {
-  const [firstname, lastname] = data.customer.name.split(' ');
+const searchFilter = (data: ResponseObject, search: string) => {
+  const [firstname, lastname] = data.customer_name.split(' ');
   const lowerCased = search.toLowerCase();
 
   return (
@@ -29,40 +30,30 @@ const descendingComparator = <T>(a: T, b: T, sortBy: keyof T) => {
   return 0;
 };
 
-const transformRawData = (rawData: ResponseData): TransformedData =>
-  rawData.map((data) => ({
-    id: data.id,
-    customer: { name: data.customer_name, id: data.customer_id },
-    currency: data.currency,
-    datetime: data.transaction_time,
-    status: data.status ? 'approved' : 'rejected',
-  }));
-
 export const processData = (
   rawData: ResponseData,
   filterAndSortOptions: {
     status: string | null;
     datetime: string | null;
-    sort: 'id' | 'datetime';
+    sort: 'id' | 'transaction_time';
     search: string | null;
   },
-): TransformedData => {
+): ResponseData => {
   const { status, datetime, sort, search } = filterAndSortOptions;
-  const transformedData = transformRawData(rawData);
 
-  return transformedData
+  return rawData
     .filter((data) => {
       let flag1 = true;
       let flag2 = true;
       let flag3 = true;
       if (status) {
-        flag1 = statusFilterFn(data, status);
+        flag1 = statusFilter(data, status);
       }
       if (datetime) {
-        flag2 = dateFilterFn(data, datetime);
+        flag2 = dateFilter(data, datetime);
       }
       if (search) {
-        flag3 = searchFilterFn(data, search);
+        flag3 = searchFilter(data, search);
       }
       return flag1 && flag2 && flag3;
     })

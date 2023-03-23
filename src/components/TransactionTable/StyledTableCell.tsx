@@ -1,6 +1,9 @@
 import { TableCell, tableCellClasses, styled } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(() => ({
+  [`&.${tableCellClasses.root}`]: {
+    textAlign: 'center',
+  },
   [`&.${tableCellClasses.head}`]: {
     borderBottom: '1px solid #cecece',
     color: '#1B2E57',
