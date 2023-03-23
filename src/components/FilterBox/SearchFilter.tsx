@@ -2,29 +2,32 @@ import { Paper, InputBase, Typography } from '@mui/material';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { useDebounce } from '@/hooks/useDebounce';
+
 const SearchFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = React.useState('');
-  //   const search = searchParams.get('search');
+  const debouncedSearchInput = useDebounce({ value: searchInput, delay: 250 });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value);
+  };
 
+  React.useEffect(() => {
     if (searchParams.has('search')) {
       searchParams.delete('search');
     }
 
     if (searchInput) {
-      searchParams.append('search', searchInput);
+      searchParams.append('search', debouncedSearchInput);
     }
     setSearchParams(searchParams);
-  };
+  }, [debouncedSearchInput]);
 
   return (
     <Paper
       elevation={0}
-      component='form'
-      onSubmit={handleSubmit}
+      component='div'
       sx={{
         p: '4px 16px',
         display: 'flex',
@@ -37,7 +40,7 @@ const SearchFilter = () => {
       <Typography component='span'>🔍</Typography>
       <InputBase
         value={searchInput}
-        onChange={(event) => setSearchInput(event.target.value)}
+        onChange={handleInputChange}
         name='search-input'
         sx={{ ml: 1, flex: 1 }}
         placeholder='Search Customer'
