@@ -41,7 +41,7 @@ const TransactionTable = () => {
         alignItems='center'
         justifyContent='space-between'
       >
-        <Typography component='caption' variant='body2' px={4} color='#666666'>
+        <Typography variant='body2' px={4} color='#666666'>
           updated : {date?.toLocaleTimeString()}
         </Typography>
         <TablePagination
