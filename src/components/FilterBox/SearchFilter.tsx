@@ -16,12 +16,13 @@ const SearchFilter = () => {
   React.useEffect(() => {
     if (searchParams.has('search')) {
       searchParams.delete('search');
+      setSearchParams(searchParams);
     }
 
     if (searchInput) {
       searchParams.append('search', debouncedSearchInput);
+      setSearchParams(searchParams);
     }
-    setSearchParams(searchParams);
   }, [debouncedSearchInput]);
 
   return (
