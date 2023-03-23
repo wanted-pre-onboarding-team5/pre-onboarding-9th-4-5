@@ -11,12 +11,9 @@ const statusFilter = (data: ResponseObject, status: string) => {
 };
 
 const searchFilter = (data: ResponseObject, search: string) => {
-  const [firstname, lastname] = data.customer_name.split(' ');
-  const lowerCased = search.toLowerCase();
-
-  return (
-    firstname.toLowerCase().includes(lowerCased) || lastname.toLowerCase().includes(lowerCased)
-  );
+  return data.customer_name
+    .toLowerCase()
+    .includes(decodeURI(search.replaceAll('+', '%20')).toLowerCase());
 };
 
 const descendingComparator = <T>(a: T, b: T, sortBy: keyof T) => {
@@ -43,18 +40,10 @@ export const processData = (
 
   return rawData
     .filter((data) => {
-      let flag1 = true;
-      let flag2 = true;
-      let flag3 = true;
-      if (status) {
-        flag1 = statusFilter(data, status);
-      }
-      if (datetime) {
-        flag2 = dateFilter(data, datetime);
-      }
-      if (search) {
-        flag3 = searchFilter(data, search);
-      }
+      const flag1 = status ? statusFilter(data, status) : true;
+      const flag2 = datetime ? dateFilter(data, datetime) : true;
+      const flag3 = search ? searchFilter(data, search) : true;
+
       return flag1 && flag2 && flag3;
     })
     .sort((a, b) => descendingComparator(a, b, sort));
